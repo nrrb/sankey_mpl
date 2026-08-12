@@ -91,11 +91,17 @@
     "_comment": [
       "Size for the README gallery image only, kept separate from `render` above.",
       "`render` is what the golden was produced at and is a test concern; changing",
-      "it moves geometry. This is a purely cosmetic knob. Six columns of long",
-      "labels need more pitch than the golden's width gives, or labels in adjacent",
-      "columns overlap — legal (separation is per-column) but ugly in a hero image."
+      "it moves geometry. This is a purely cosmetic knob.",
+      "",
+      "Why these are wider than you would guess: under the default label side mode",
+      "labels point away from the plot middle, so the one column left of the middle",
+      "aims its labels right and the one to its right aims them left, both into the",
+      "same gap. The separation pass is per-column and cannot see that pair, so the",
+      "only fix is enough column pitch to fit both. These widths are the measured",
+      "minimum that leaves no overlapping label boxes; check with the detector",
+      "described in PLAN.md before lowering one."
     ],
-    "width": 1760,
+    "width": 2260,
     "height": 480
   }
 }

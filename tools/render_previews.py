@@ -29,7 +29,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from sankey_mpl import render_sankey, save, text_width
+from sankey_mpl import render_sankey, save
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "tests" / "data"
@@ -45,26 +45,22 @@ SURFACE = "#FCFCFB"
 PREVIEW_DPR = 2
 
 
-def preview_config(nodes: dict, preview: dict) -> dict:
+def preview_config(preview: dict) -> dict:
     """Config for one preview, sized from that dataset's ``preview`` block.
 
     Deliberately *not* the dataset's ``render`` block: that is what the golden was
     produced at, so treating it as a display size would mean cosmetic tweaks moved
     test geometry.
+
+    Everything about labels is left at its default on purpose. The gallery's job is
+    to show what someone gets out of the box, so overriding label placement here
+    would make the README advertise a diagram the default config does not produce.
     """
-    # The gutter has to clear the widest first-column label or the guard refuses
-    # to draw. Every other column's labels sit in the pitch between columns,
-    # which is why the preview widths are generous.
-    widest = max(
-        (spec.get("label", key) for key, spec in nodes.items() if key.startswith("src:")),
-        key=text_width,
-    )
     return {
         "width_px": preview["width"],
         "height_px": preview["height"],
         "device_pixel_ratio": PREVIEW_DPR,
         "background_color": SURFACE,
-        "label_gutter_px": text_width(widest) + 24,
     }
 
 
@@ -76,7 +72,7 @@ def main() -> None:
         key = entry["key"]
         data = json.loads((DATA / f"{key}.json").read_text())
 
-        config = preview_config(data["nodes"], entry["preview"])
+        config = preview_config(entry["preview"])
         result = render_sankey(data["nodes"], data["links"], config)
 
         for suffix in ("svg", "png"):
