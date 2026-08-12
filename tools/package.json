@@ -2,7 +2,7 @@
   "name": "sankey-mpl-golden-tools",
   "private": true,
   "type": "module",
-  "description": "Regenerates the example fixture and its golden geometry by running the reference JavaScript implementation. Not part of the Python package.",
+  "description": "Regenerates the dataset fixtures and their golden geometry by running the reference JavaScript implementation. Never installed: the wheel ships only src/sankey_mpl. Travels in the sdist so a source release can rebuild its own goldens.",
   "scripts": {
     "generate": "node generate_golden.mjs"
   },

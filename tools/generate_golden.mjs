@@ -10,8 +10,16 @@
 // exists so the goldens stay regenerable rather than becoming opaque blobs
 // nobody can rebuild.
 //
-// It is not part of the package and CI does not run it. Node and npm are only
-// needed if you are changing the datasets.
+// Nothing in this directory is ever installed. The wheel ships only
+// `src/sankey_mpl`, so this file cannot reach site-packages and `pip install` never
+// brings Node anywhere near you.
+//
+// It *is* shipped in the sdist though, along with `tools/datasets/`, and that is
+// deliberate rather than an oversight: a source release that could not rebuild its
+// own goldens would leave them unverifiable blobs. Shipped for reproducibility, not
+// for use at runtime. See the sdist comment in pyproject.toml.
+//
+// CI does not run this. Node and npm are only needed if you are changing a dataset.
 //
 // Writes, relative to the repository root:
 //   tests/data/datasets.json       the manifest conftest parametrises over
