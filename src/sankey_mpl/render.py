@@ -22,27 +22,36 @@ from .config import merge_config
 from .geometry import Frame, control_points, cubic_point, cubic_subsegment
 from .layout import Node, compute_layout
 
-__all__ = ["SankeyFigure", "render_sankey", "text_width"]
+__all__ = [
+    "SankeyDrawing",
+    "SankeyFigure",
+    "build_frame",
+    "draw_sankey",
+    "render_sankey",
+    "text_width",
+]
 
 _NODE_Z = 1
 _RIBBON_Z = 2
 _LABEL_Z = 3
 
 
-class SankeyFigure:
-    """A rendered diagram: the figure, plus everything that was resolved to draw it."""
+class SankeyDrawing:
+    """A drawn diagram: everything that was resolved in order to draw it.
 
-    __slots__ = ("figure", "layout", "frame", "config", "labels", "labels_dropped")
+    What :func:`draw_sankey` returns. It carries no figure, because a diagram
+    drawn into someone else's axes does not own one.
+    """
+
+    __slots__ = ("layout", "frame", "config", "labels", "labels_dropped")
 
     def __init__(
         self,
-        figure: Figure,
         frame: Frame,
         config: Mapping[str, Any],
         labels: list[dict[str, Any]],
         labels_dropped: list[str],
     ) -> None:
-        self.figure = figure
         self.frame = frame
         self.layout = frame.layout
         self.config = config
@@ -57,6 +66,23 @@ class SankeyFigure:
         data["labels"] = self.labels
         data["labels_dropped"] = self.labels_dropped
         return data
+
+
+class SankeyFigure(SankeyDrawing):
+    """A rendered diagram: the figure, plus everything that was resolved to draw it."""
+
+    __slots__ = ("figure",)
+
+    def __init__(
+        self,
+        figure: Figure,
+        frame: Frame,
+        config: Mapping[str, Any],
+        labels: list[dict[str, Any]],
+        labels_dropped: list[str],
+    ) -> None:
+        super().__init__(frame, config, labels, labels_dropped)
+        self.figure = figure
 
 
 # --------------------------------------------------------------------------- #
@@ -325,8 +351,138 @@ def _draw_labels(ax, frame: Frame) -> tuple[list[dict[str, Any]], list[str]]:
 
 
 # --------------------------------------------------------------------------- #
-# Entry point
+# Entry points
 # --------------------------------------------------------------------------- #
+
+
+def build_frame(
+    nodes: Mapping[str, Mapping[str, Any]],
+    links: Sequence[Mapping[str, Any]],
+    config: Mapping[str, Any] | None = None,
+) -> Frame:
+    """Resolve everything needed to draw, without drawing or making a figure.
+
+    Registers any ``font_paths``, computes the layout, builds the pixel frame and
+    checks the label gutter. Call it when you need the diagram's final pixel size
+    before committing to a place to put it: ``label_gutter_px`` and
+    ``preserve_column_pitch`` both feed into ``frame.width``, so the width that
+    comes out is not necessarily the ``width_px`` that went in.
+
+    The returned frame carries the merged config as ``frame.config``.
+    """
+    merged = merge_config(config)
+    # Before any text is measured: an unregistered family falls back silently, and
+    # the gutter check and the label collision pass both measure text, so a late
+    # registration would change the layout and not just the appearance.
+    for path in merged["font_paths"]:
+        font_manager.fontManager.addfont(path)
+
+    frame_height = (
+        float(merged["height_px"])
+        - float(merged["pad_top"])
+        - float(merged["pad_bottom"])
+    )
+    layout = compute_layout(
+        nodes,
+        links,
+        gap_px=float(merged["node_gap_px"]),
+        plot_height=frame_height,
+        size_mode=merged["node_size_mode"],
+        align_sinks_right=bool(merged["align_sinks_right"]),
+    )
+    frame = Frame(layout, merged)
+    _check_gutter(frame)
+    return frame
+
+
+def _draw_into(ax, frame: Frame) -> tuple[list[dict[str, Any]], list[str]]:
+    """Add the artists for ``frame`` to ``ax``, and report the labels placed.
+
+    Assumes ``ax`` is already in the pixel coordinate system the frame describes.
+    Takes no ``links`` argument: the layout retains them, in input order, which is
+    the order the ribbons have to be drawn in for overlaps to stack as upstream's.
+    """
+    config = frame.config
+
+    # Nodes first, then ribbons in input order, then labels on top.
+    for node in frame.layout.nodes.values():
+        rect_x, rect_y, width, height = frame.node_rect(node)
+        rect = Rectangle(
+            (rect_x, rect_y),
+            width,
+            height,
+            facecolor=parse_color(node.color) if node.color else (0.0, 0.0, 0.0),
+            edgecolor=(
+                parse_color(config["node_edge_color"])
+                if config["node_edge_color"]
+                else "none"
+            ),
+            linewidth=float(config["node_edge_width_px"]),
+            antialiased=True,
+            clip_on=False,
+            zorder=_NODE_Z,
+        )
+        rect.set_rasterized(False)
+        ax.add_patch(rect)
+
+    for index, link in enumerate(frame.layout.links):
+        source = frame.layout.nodes[link["from"]]
+        target = frame.layout.nodes[link["to"]]
+        for patch in _ribbon_patches(
+            frame,
+            index,
+            source.color if source.color else "#000000",
+            target.color if target.color else "#000000",
+        ):
+            ax.add_patch(patch)
+
+    return _draw_labels(ax, frame)
+
+
+def draw_sankey(
+    ax,
+    nodes: Mapping[str, Mapping[str, Any]],
+    links: Sequence[Mapping[str, Any]],
+    config: Mapping[str, Any] | None = None,
+) -> SankeyDrawing:
+    """Draw a sankey diagram into an existing axes.
+
+    For embedding a diagram in a larger figure — a report page, a dashboard, a
+    multi-panel comparison. :func:`render_sankey` is the same drawing with a
+    figure of its own.
+
+    ``nodes``, ``links`` and ``config`` mean exactly what they mean for
+    :func:`render_sankey`.
+
+    Sets the axes limits itself, to ``xlim (0, frame.width)`` and ``ylim
+    (frame.height, 0)``, and turns the axes off. That is not a convenience: those
+    limits *are* the one-unit-is-one-pixel contract, and getting them wrong
+    rescales the diagram silently rather than failing, so it should not be
+    possible to get wrong.
+
+    It does **not** set the axes facecolor, because an embedded diagram sits on a
+    surface its host has already painted. In this path ``background_color``
+    therefore only does its other job, which is telling
+    ``link_flatten_alpha=True`` what to pre-blend the ribbons against — so it
+    still has to be set, and set to the colour actually behind the diagram, or the
+    ribbons come out tinted for a surface that isn't there.
+
+    Two configuration notes that only matter when embedding:
+
+    * Set ``preserve_column_pitch=False`` and ``width_px`` to the width of the box
+      you are drawing into. The default widens the diagram to offset the label
+      gutter — a 900px request becomes 1097px with the default 200px gutter —
+      which would overflow the space you allotted.
+    * Size the axes from ``build_frame()`` first if you need the width to be
+      exact, or assert ``frame.width`` against your box afterwards. This function
+      returns the frame on ``.frame`` for that.
+    """
+    frame = build_frame(nodes, links, config)
+    ax.set_xlim(0.0, frame.width)
+    ax.set_ylim(frame.height, 0.0)  # y downward
+    ax.set_axis_off()
+    labels, dropped = _draw_into(ax, frame)
+    return SankeyDrawing(frame, frame.config, labels, dropped)
 
 
 def render_sankey(
@@ -356,25 +512,8 @@ def render_sankey(
     SankeyFigure
         Holds ``.figure`` for saving or embedding, and the resolved layout.
     """
-    merged = merge_config(config)
-    for path in merged["font_paths"]:
-        font_manager.fontManager.addfont(path)
-
-    frame_height = (
-        float(merged["height_px"])
-        - float(merged["pad_top"])
-        - float(merged["pad_bottom"])
-    )
-    layout = compute_layout(
-        nodes,
-        links,
-        gap_px=float(merged["node_gap_px"]),
-        plot_height=frame_height,
-        size_mode=merged["node_size_mode"],
-        align_sinks_right=bool(merged["align_sinks_right"]),
-    )
-    frame = Frame(layout, merged)
-    _check_gutter(frame)
+    frame = build_frame(nodes, links, config)
+    merged = frame.config
 
     dpi = 72.0 * float(merged["device_pixel_ratio"])
     background = (
@@ -390,40 +529,9 @@ def render_sankey(
     ax = figure.add_axes((0.0, 0.0, 1.0, 1.0))
     ax.set_xlim(0.0, frame.width)
     ax.set_ylim(frame.height, 0.0)  # y downward
+    # Unlike draw_sankey, this figure owns its background, so it paints it.
     ax.set_facecolor(background)
     ax.set_axis_off()
 
-    # Nodes first, then ribbons in input order, then labels on top.
-    for node in layout.nodes.values():
-        rect_x, rect_y, width, height = frame.node_rect(node)
-        rect = Rectangle(
-            (rect_x, rect_y),
-            width,
-            height,
-            facecolor=parse_color(node.color) if node.color else (0.0, 0.0, 0.0),
-            edgecolor=(
-                parse_color(merged["node_edge_color"])
-                if merged["node_edge_color"]
-                else "none"
-            ),
-            linewidth=float(merged["node_edge_width_px"]),
-            antialiased=True,
-            clip_on=False,
-            zorder=_NODE_Z,
-        )
-        rect.set_rasterized(False)
-        ax.add_patch(rect)
-
-    for index, link in enumerate(links):
-        source = layout.nodes[link["from"]]
-        target = layout.nodes[link["to"]]
-        for patch in _ribbon_patches(
-            frame,
-            index,
-            source.color if source.color else "#000000",
-            target.color if target.color else "#000000",
-        ):
-            ax.add_patch(patch)
-
-    placed, dropped = _draw_labels(ax, frame)
+    placed, dropped = _draw_into(ax, frame)
     return SankeyFigure(figure, frame, merged, placed, dropped)

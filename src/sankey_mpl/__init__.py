@@ -21,18 +21,28 @@ from .config import DEFAULT_CONFIG
 from .export import save
 from .geometry import Frame
 from .layout import Link, Node, SankeyLayout, compute_layout
-from .render import SankeyFigure, render_sankey, text_width
+from .render import (
+    SankeyDrawing,
+    SankeyFigure,
+    build_frame,
+    draw_sankey,
+    render_sankey,
+    text_width,
+)
 
 __all__ = [
     "DEFAULT_CONFIG",
     "Frame",
     "Link",
     "Node",
+    "SankeyDrawing",
     "SankeyFigure",
     "SankeyLayout",
     "UPSTREAM_VERSION",
     "__version__",
+    "build_frame",
     "compute_layout",
+    "draw_sankey",
     "render_sankey",
     "save",
     "text_width",

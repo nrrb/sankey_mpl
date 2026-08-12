@@ -5,8 +5,9 @@ from __future__ import annotations
 import hashlib
 
 import pytest
+from matplotlib.figure import Figure
 
-from sankey_mpl import render_sankey, save, text_width
+from sankey_mpl import build_frame, draw_sankey, render_sankey, save, text_width
 
 
 @pytest.fixture
@@ -260,3 +261,87 @@ def test_link_order_matters_exactly_where_the_chain_ties(
         )
     else:
         assert a["nodes"] == b["nodes"]
+
+
+# --------------------------------------------------------------------------- #
+# Embedding
+# --------------------------------------------------------------------------- #
+
+
+def _embed(nodes, links, config, width, height):
+    """Draw into a figure of our own making, the way a host page would."""
+    figure = Figure(figsize=(width / 72.0, height / 72.0), dpi=72)
+    ax = figure.add_axes((0.0, 0.0, 1.0, 1.0))
+    return ax, draw_sankey(ax, nodes, links, config)
+
+
+def test_embedded_geometry_matches_a_standalone_render(nodes, links, wide_enough):
+    """The whole point of the seam: same input, same diagram, either entry point.
+
+    Compares resolved geometry rather than pixels, which is the comparison that
+    survives a matplotlib upgrade.
+    """
+    standalone = render_sankey(nodes, links, wide_enough)
+    _, embedded = _embed(
+        nodes, links, wide_enough, standalone.frame.width, standalone.frame.height
+    )
+    assert embedded.as_dict() == standalone.as_dict()
+
+
+def test_embedding_draws_the_same_artists(nodes, links, wide_enough):
+    """Identical geometry would also be reported by a function that drew nothing."""
+    standalone = render_sankey(nodes, links, wide_enough)
+    host, _ = _embed(
+        nodes, links, wide_enough, standalone.frame.width, standalone.frame.height
+    )
+    theirs = standalone.figure.axes[0]
+    assert len(host.patches) == len(theirs.patches)
+    assert len(host.texts) == len(theirs.texts)
+    assert len(host.patches) > 0
+
+
+def test_draw_sankey_sets_the_pixel_contract_itself(nodes, links, wide_enough):
+    """A host that gets the limits wrong would rescale the diagram silently, so
+    draw_sankey does not let the host set them at all."""
+    frame = build_frame(nodes, links, wide_enough)
+    figure = Figure(figsize=(4, 3), dpi=72)  # deliberately the wrong shape
+    ax = figure.add_axes((0.0, 0.0, 1.0, 1.0))
+    ax.set_xlim(-17.0, 3.0)
+    ax.set_ylim(-4.0, 900.0)  # and upside down
+
+    draw_sankey(ax, nodes, links, wide_enough)
+
+    assert ax.get_xlim() == (0.0, frame.width)
+    assert ax.get_ylim() == (frame.height, 0.0)  # y downward
+    assert not ax.axison
+
+
+def test_embedding_leaves_the_host_surface_alone(nodes, links, wide_enough):
+    """An embedded diagram sits on a surface its host already painted, so it must
+    not paint one of its own — while a figure it owns still gets its background.
+
+    background_color is set here and deliberately differs from the host's surface:
+    in the embedded path it is only meant to feed link_flatten_alpha, so if
+    draw_sankey painted it the host's colour would be gone.
+    """
+    config = {**wide_enough, "background_color": "#FFFFFF"}
+
+    figure = Figure(figsize=(900 / 72.0, 360 / 72.0), dpi=72)
+    host = figure.add_axes((0.0, 0.0, 1.0, 1.0))
+    host.set_facecolor("#F0F4F6")  # the host's own card surface
+    draw_sankey(host, nodes, links, config)
+    assert host.get_facecolor() == pytest.approx((240 / 255, 244 / 255, 246 / 255, 1.0))
+
+    owned = render_sankey(nodes, links, config)
+    assert owned.figure.axes[0].get_facecolor() == (1.0, 1.0, 1.0, 1.0)
+
+
+def test_build_frame_reports_the_width_before_anything_is_drawn(nodes, links):
+    """What an embedder calls it for: the gutter and preserve_column_pitch both
+    move the final width, so the box cannot be allotted from width_px alone."""
+    config = {"width_px": 900, "label_gutter_px": 200}
+    widened = build_frame(nodes, links, config)
+    assert widened.width == pytest.approx(1097)
+
+    exact = build_frame(nodes, links, {**config, "preserve_column_pitch": False})
+    assert exact.width == pytest.approx(900)

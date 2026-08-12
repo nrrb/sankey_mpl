@@ -12,6 +12,7 @@ and [Labels](#labels) — labels are the only part that needs a decision from yo
 - [The pixel contract](#the-pixel-contract)
 - [Labels](#labels)
 - [Colour, gradients and alpha](#colour-gradients-and-alpha)
+- [Embedding](#embedding)
 - [Export](#export)
 - [Reproducibility](#reproducibility)
 - [Differences from chartjs-chart-sankey](#differences-from-chartjs-chart-sankey)
@@ -98,11 +99,30 @@ directly — with one caveat, see [Export](#export).
 Draws the diagram. `config` overrides `DEFAULT_CONFIG`; unknown keys raise rather
 than being ignored, so a typo is an error and not a silently unchanged picture.
 
-### `SankeyFigure`
+### `draw_sankey(ax, nodes, links, config=None) -> SankeyDrawing`
+
+Draws into an axes you already have, for embedding the diagram in a larger figure
+— a report page, a dashboard, a multi-panel comparison. Same three arguments as
+`render_sankey` after the axes. See [Embedding](#embedding) for the four things
+that behave differently in this mode, all of which bite silently.
+
+### `build_frame(nodes, links, config=None) -> Frame`
+
+Resolves everything needed to draw — layout, scales, padding — without drawing or
+creating a figure. Call it when you need the diagram's final pixel size *before*
+choosing where to put it: `label_gutter_px` and `preserve_column_pitch` both feed
+into `frame.width`, so the width that comes out is not necessarily the `width_px`
+that went in. The merged config comes back on `frame.config`.
+
+### `SankeyFigure` / `SankeyDrawing`
+
+`render_sankey` returns a `SankeyFigure`; `draw_sankey` returns a
+`SankeyDrawing`, which is the same thing without `.figure` — a diagram drawn into
+someone else's axes does not own a figure.
 
 | Attribute | What it is |
 |---|---|
-| `.figure` | the matplotlib `Figure` |
+| `.figure` | the matplotlib `Figure` (`SankeyFigure` only) |
 | `.layout` | resolved positions in flow units (`SankeyLayout`) |
 | `.frame` | the pixel frame: scales, padding, plot area (`Frame`) |
 | `.config` | the merged configuration actually used |
@@ -327,6 +347,58 @@ is universally better:
 
 For a light page with mostly non-crossing ribbons, flattening looks cleaner. For a
 dense diagram where crossings carry meaning, keep the alpha.
+
+## Embedding
+
+`draw_sankey(ax, nodes, links, config)` puts the diagram in an axes you already
+have, so it can be one panel of a bigger figure:
+
+```python
+from matplotlib.figure import Figure
+from sankey_mpl import build_frame, draw_sankey
+
+config = {
+    "width_px": 720,  # the box you are drawing into
+    "height_px": 360,
+    "preserve_column_pitch": False,  # see below
+    "label_gutter_px": 180,
+    "link_flatten_alpha": True,
+    "background_color": "#FFFFFF",  # what is actually behind the diagram
+}
+
+# The page is in pixels too, so one axes rectangle is one box of the layout.
+page = Figure(figsize=(792 / 72, 612 / 72), dpi=72)
+ax = page.add_axes((36 / 792, 150 / 612, 720 / 792, 360 / 612))
+drawing = draw_sankey(ax, nodes, links, config)
+```
+
+Four things behave differently from `render_sankey`, and all four bite silently
+rather than raising:
+
+- **Set `preserve_column_pitch=False` and `width_px` to your box width.** The
+  default *widens* the diagram to offset the label gutter — a 900px request with
+  the default 200px gutter comes out 1097px — which overflows the space you
+  allotted. With it off, `frame.width == width_px` and the box is exact. If you
+  want the widening, call `build_frame()` first and size the box from
+  `frame.width` instead.
+- **The axes limits are not yours to set.** `draw_sankey` sets them itself, to
+  `xlim (0, frame.width)` and `ylim (frame.height, 0)`, because those limits *are*
+  the [pixel contract](#the-pixel-contract) — getting them wrong rescales the
+  diagram instead of failing. Anything you set beforehand is overwritten.
+- **The axes facecolor is left alone**, since an embedded diagram sits on a
+  surface its host already painted. So `background_color` here does only its other
+  job: telling `link_flatten_alpha=True` what to pre-blend the ribbons against. It
+  still has to be set, and set to the colour genuinely behind the diagram — the
+  card, not the page, if those differ — or the ribbons come out blended for a
+  surface that isn't there.
+- **The axes box must have the aspect the frame asks for.** One data unit is one
+  pixel only if `frame.width × frame.height` pixels of figure are actually
+  underneath it. Compute the axes rectangle from the same pixel numbers as the
+  rest of your page and the contract holds; stretch the box and everything inside
+  it stretches with it, `label_font_size_px` included.
+
+Everything else is the same, `as_dict()` included, so a diagram embedded in a page
+and the same diagram rendered standalone resolve to identical geometry.
 
 ## Export
 
