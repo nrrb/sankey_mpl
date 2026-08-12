@@ -46,17 +46,26 @@ path = "src/sankey_mpl/__init__.py"
 packages = ["src/sankey_mpl"]
 
 [tool.hatch.build.targets.sdist]
-# The generator is worth shipping in the sdist so the golden data stays
-# reproducible from a source release; its node_modules are not.
+# The generators are worth shipping so the goldens and the gallery stay
+# reproducible from a source release. `tools` is included wholesale rather than by
+# glob: the previous `tools/*.mjs` + `tools/*.json` pair silently stopped covering
+# the dataset specs when they moved into `tools/datasets/`, which shipped the
+# generator with none of its inputs. A directory cannot drift out of date that way.
+#
+# node_modules is fetched, not authored. examples/ is regenerable output and would
+# add several megabytes to every release for no benefit.
 include = [
   "src",
   "tests",
-  "tools/*.mjs",
-  "tools/*.json",
+  "tools",
   "docs",
   "README.md",
   "LICENSE",
   "NOTICE",
+]
+exclude = [
+  "tools/node_modules",
+  "tools/package-lock.json",
 ]
 
 [tool.pytest.ini_options]
