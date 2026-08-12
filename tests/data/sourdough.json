@@ -1,0 +1,226 @@
+{
+  "key": "sourdough",
+  "title": "The Sourdough Dynasty",
+  "nodes": {
+    "src:flour": {
+      "label": "Flour (64,000 g)",
+      "color": "#8A94A0"
+    },
+    "generation:original": {
+      "label": "The original jar, March 2020 (30,700 g)",
+      "color": "#3F9C35"
+    },
+    "care:religious": {
+      "label": "Fed religiously (35,295 g)",
+      "color": "#8A94A0"
+    },
+    "product:loaf": {
+      "label": "An actual loaf of bread (29,300 g)",
+      "color": "#8A94A0"
+    },
+    "fate:eaten": {
+      "label": "Eaten (26,000 g)",
+      "color": "#5C6672"
+    },
+    "product:photo": {
+      "label": "A photograph posted online (5,200 g)",
+      "color": "#8A94A0"
+    },
+    "fate:compost": {
+      "label": "Composted (23,095 g)",
+      "color": "#5C6672"
+    },
+    "care:occasional": {
+      "label": "Fed when remembered (17,200 g)",
+      "color": "#8A94A0"
+    },
+    "product:puck": {
+      "label": "A dense and blameless hockey puck (17,895 g)",
+      "color": "#8A94A0"
+    },
+    "product:hooch": {
+      "label": "Hooch (11,605 g)",
+      "color": "#8A94A0"
+    },
+    "fate:fridge": {
+      "label": "Still in the fridge (11,605 g)",
+      "color": "#5C6672"
+    },
+    "generation:coworker": {
+      "label": "Gifted to a coworker (15,495 g)",
+      "color": "#7A4FA3"
+    },
+    "care:march": {
+      "label": "Fed once, in March (11,505 g)",
+      "color": "#8A94A0"
+    },
+    "generation:onward": {
+      "label": "Gifted onward, twice (7,500 g)",
+      "color": "#E8730C"
+    },
+    "fate:regifted": {
+      "label": "Made somebody else's problem (3,300 g)",
+      "color": "#5C6672"
+    },
+    "generation:backup": {
+      "label": "The neglected backup (10,300 g)",
+      "color": "#1F6FB2"
+    },
+    "generation:forgotten": {
+      "label": "Forgotten behind the mayonnaise (5 g)",
+      "color": "#C7302B"
+    }
+  },
+  "links": [
+    {
+      "from": "src:flour",
+      "to": "generation:original",
+      "flow": 30700
+    },
+    {
+      "from": "generation:original",
+      "to": "care:religious",
+      "flow": 22000
+    },
+    {
+      "from": "care:religious",
+      "to": "product:loaf",
+      "flow": 25300
+    },
+    {
+      "from": "product:loaf",
+      "to": "fate:eaten",
+      "flow": 26000
+    },
+    {
+      "from": "care:religious",
+      "to": "product:photo",
+      "flow": 4000
+    },
+    {
+      "from": "product:photo",
+      "to": "fate:compost",
+      "flow": 5200
+    },
+    {
+      "from": "generation:original",
+      "to": "care:occasional",
+      "flow": 8700
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:puck",
+      "flow": 9800
+    },
+    {
+      "from": "product:puck",
+      "to": "fate:compost",
+      "flow": 17895
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:hooch",
+      "flow": 2200
+    },
+    {
+      "from": "product:hooch",
+      "to": "fate:fridge",
+      "flow": 11605
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:coworker",
+      "flow": 15495
+    },
+    {
+      "from": "generation:coworker",
+      "to": "care:religious",
+      "flow": 9995
+    },
+    {
+      "from": "generation:coworker",
+      "to": "care:occasional",
+      "flow": 4000
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:loaf",
+      "flow": 4000
+    },
+    {
+      "from": "generation:coworker",
+      "to": "care:march",
+      "flow": 1500
+    },
+    {
+      "from": "care:march",
+      "to": "product:hooch",
+      "flow": 9405
+    },
+    {
+      "from": "care:religious",
+      "to": "product:puck",
+      "flow": 5995
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:onward",
+      "flow": 7500
+    },
+    {
+      "from": "generation:onward",
+      "to": "care:religious",
+      "flow": 3300
+    },
+    {
+      "from": "product:loaf",
+      "to": "fate:regifted",
+      "flow": 3300
+    },
+    {
+      "from": "generation:onward",
+      "to": "care:occasional",
+      "flow": 3300
+    },
+    {
+      "from": "generation:onward",
+      "to": "care:march",
+      "flow": 900
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:backup",
+      "flow": 10300
+    },
+    {
+      "from": "generation:backup",
+      "to": "care:march",
+      "flow": 9100
+    },
+    {
+      "from": "care:march",
+      "to": "product:puck",
+      "flow": 2100
+    },
+    {
+      "from": "generation:backup",
+      "to": "care:occasional",
+      "flow": 1200
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:photo",
+      "flow": 1200
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:forgotten",
+      "flow": 5
+    },
+    {
+      "from": "generation:forgotten",
+      "to": "care:march",
+      "flow": 5
+    }
+  ]
+}

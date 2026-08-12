@@ -1,0 +1,88 @@
+{
+  "_comment": [
+    "The Group Chat Decides Where to Get Brunch — 12,000 messages, one reservation.",
+    "",
+    "The odd one out on purpose: a pure fan-out tree. Every node has exactly one",
+    "parent, achieved by giving each branch its own phase, signal and outcome nodes",
+    "rather than sharing them. That makes this the only fixture where the per-column",
+    "overlap sweep has nothing to do, which is a code path no other fixture covers —",
+    "a regression that made the sweep too aggressive would show up here and nowhere",
+    "else. Deliberately not a replacement for the shared-middle fixtures; it is the",
+    "control case.",
+    "",
+    "What the shape exercises:",
+    "  - the absence of overlap resolution, with placement coming purely from the",
+    "    traversal;",
+    "  - the gap solve on a graph whose tallest node is a leaf rather than a hub;",
+    "  - four messages of 'it actually happened' against 5,100 of 'the long",
+    "    silence', so the label drop rule still fires.",
+    "",
+    "Flows are messages and conserve to 12,000 exactly.",
+    "",
+    "Regenerate the derived files with: node tools/generate_golden.mjs"
+  ],
+  "key": "groupchat",
+  "title": "The Group Chat Decides Where to Get Brunch",
+  "blurb": "A pure fan-out tree with no shared middle nodes — the control case where the overlap sweep has nothing to do.",
+  "orderSensitive": false,
+  "unit": "",
+  "source": "messages",
+  "layers": ["src", "topic", "phase", "signal", "outcome"],
+  "rows": [
+    { "path": ["brunch", "brunch_burst", "brunch_logistics", "brunch_cancelled"], "flow": 2600 },
+    { "path": ["brunch", "brunch_trying", "brunch_lastone", "brunch_happened"], "flow": 4 },
+    { "path": ["hike", "hike_burst", "hike_silence", "hike_ghosted"], "flow": 1850 },
+    { "path": ["hike", "hike_trying", "hike_lastone", "hike_rescheduled"], "flow": 320 },
+    { "path": ["birthday", "bday_burst", "bday_logistics", "bday_happened"], "flow": 3100 },
+    { "path": ["birthday", "bday_silence", "bday_nobody", "bday_cancelled"], "flow": 740 },
+    { "path": ["something", "some_burst", "some_silence", "some_ghosted"], "flow": 2900 },
+    { "path": ["something", "some_trying", "some_nobody", "some_void"], "flow": 486 }
+  ],
+  "names": {
+    "src:messages": "Messages",
+    "topic:brunch": "Brunch somewhere new",
+    "topic:hike": "A hike nobody wants",
+    "topic:birthday": "Someone's birthday",
+    "topic:something": "\"We should do something\"",
+    "phase:brunch_burst": "Nine emoji in four seconds",
+    "phase:brunch_trying": "One person still trying",
+    "phase:hike_burst": "Enthusiasm, initially",
+    "phase:hike_trying": "One person posting trail maps",
+    "phase:bday_burst": "Genuine excitement",
+    "phase:bday_silence": "Nobody volunteers to organise",
+    "phase:some_burst": "Everyone agrees in principle",
+    "phase:some_trying": "A poll nobody answers",
+    "signal:brunch_logistics": "The logistics quagmire",
+    "signal:brunch_lastone": "A direct message, out of desperation",
+    "signal:hike_silence": "The long silence",
+    "signal:hike_lastone": "\"Next weekend?\"",
+    "signal:bday_logistics": "A spreadsheet appears",
+    "signal:bday_nobody": "Read by eleven, answered by none",
+    "signal:some_silence": "Three weeks of nothing",
+    "signal:some_nobody": "Someone reacts with a thumbs up",
+    "outcome:brunch_cancelled": "Cancelled 20 minutes before",
+    "outcome:brunch_happened": "It actually happened",
+    "outcome:hike_ghosted": "Ghosted entirely",
+    "outcome:hike_rescheduled": "Rescheduled into the void",
+    "outcome:bday_happened": "Happened, under duress",
+    "outcome:bday_cancelled": "Quietly cancelled",
+    "outcome:some_ghosted": "Ghosted entirely, again",
+    "outcome:some_void": "Still theoretically happening"
+  },
+  "colors": {
+    "default": "#8A94A0",
+    "colorBy": "topic",
+    "layers": {
+      "outcome": "#5C6672"
+    }
+  },
+  "render": {
+    "cssWidth": 1200,
+    "cssHeight": 420,
+    "devicePixelRatio": 3
+  },
+  "preview": {
+    "width": 1420,
+    "height": 440
+  }
+}

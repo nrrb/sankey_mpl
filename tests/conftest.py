@@ -4,10 +4,21 @@ The golden data in ``tests/data`` was produced by running the reference
 JavaScript implementation (``tools/generate_golden.mjs``), so comparing against
 it is a genuine check rather than this library agreeing with itself.
 
+Every fixture here is parametrised over all five datasets, so a test that takes
+``nodes``, ``links`` or ``golden`` automatically runs against each of them. The
+five are deliberately different shapes — dense sharing, a conserved time budget,
+a pure tree, a convergent funnel, and one with tied flows — because several code
+paths only appear in one of them. ``tests/data/datasets.json`` records what each
+is for.
+
 Three of the library's defaults deliberately differ from the reference and move
 geometry: the node gap, the label gutter, and the label side rule. Tests that
 compare pixel positions therefore run under ``parity_config``, which puts those
 three back. Tests of the defaults' own behaviour do not use it.
+
+Nothing here hardcodes a number that the data could supply instead. Each
+dataset's ``parity_config`` is derived from its own golden, so adding or changing
+a dataset needs no edits in this file.
 """
 
 from __future__ import annotations
@@ -19,25 +30,57 @@ import pytest
 
 DATA = Path(__file__).parent / "data"
 
+MANIFEST = json.loads((DATA / "datasets.json").read_text())["datasets"]
+KEYS = [entry["key"] for entry in MANIFEST]
+
+
+@pytest.fixture(scope="session", params=KEYS)
+def dataset(request: pytest.FixtureRequest) -> dict:
+    """One of the five datasets, with its input and its golden geometry."""
+    key = request.param
+    data = json.loads((DATA / f"{key}.json").read_text())
+    return {
+        "key": key,
+        "title": data["title"],
+        "nodes": data["nodes"],
+        "links": data["links"],
+        "golden": json.loads((DATA / f"{key}-golden.json").read_text()),
+    }
+
 
 @pytest.fixture(scope="session")
-def example() -> dict:
-    return json.loads((DATA / "example.json").read_text())
+def nodes(dataset: dict) -> dict:
+    return dataset["nodes"]
 
 
 @pytest.fixture(scope="session")
-def nodes(example: dict) -> dict:
-    return example["nodes"]
+def links(dataset: dict) -> list:
+    return dataset["links"]
 
 
 @pytest.fixture(scope="session")
-def links(example: dict) -> list:
-    return example["links"]
+def golden(dataset: dict) -> dict:
+    return dataset["golden"]
 
 
 @pytest.fixture(scope="session")
-def golden() -> dict:
-    return json.loads((DATA / "golden-layout.json").read_text())
+def order_sensitive(dataset: dict) -> bool:
+    """Whether reversing this dataset's link list changes its layout.
+
+    Declared per dataset in ``tools/datasets/*.json`` rather than computed, and
+    deliberately so: computing it would mean asking the layout whether the layout
+    agrees with itself, which proves nothing. Pinned as data, it fails loudly when
+    a change to the tie-break chain flips a dataset from one category to the other.
+
+    Do not reach for equal sibling flows as a proxy for this — the two come apart.
+    ``catday`` has no two sibling links of equal flow yet is order-sensitive,
+    because two of its activity nodes tie on subtree size *and* degree, and the
+    chain is a sequence of stable sorts rather than one combined key, so the
+    residual order those tied sorts leave behind is the input order. ``sourdough``
+    is the mirror image: equal sibling flows that subtree size resolves before flow
+    is ever compared, and no sensitivity at all.
+    """
+    return next(e for e in MANIFEST if e["key"] == dataset["key"])["orderSensitive"]
 
 
 @pytest.fixture(scope="session")

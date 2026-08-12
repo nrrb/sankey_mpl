@@ -1,0 +1,316 @@
+{
+  "key": "itwasdns",
+  "title": "It Was DNS",
+  "nodes": {
+    "src:alerts": {
+      "label": "Alerts (2,400,000)",
+      "color": "#8A94A0"
+    },
+    "severity:informational": {
+      "label": "Informational (2,090,000)",
+      "color": "#8A94A0"
+    },
+    "response:autoclosed": {
+      "label": "Auto-closed by a rule (2,033,000)",
+      "color": "#8A94A0"
+    },
+    "hypothesis:network": {
+      "label": "\"It's the network\" (1,894,360)",
+      "color": "#8A94A0"
+    },
+    "cause:fine": {
+      "label": "Nothing. It was fine. (2,211,001)",
+      "color": "#3F9C35"
+    },
+    "resolution:wontfix": {
+      "label": "Closed as won't fix (2,233,401)",
+      "color": "#5C6672"
+    },
+    "hypothesis:deploy": {
+      "label": "\"It's the deploy\" (476,017)",
+      "color": "#8A94A0"
+    },
+    "response:queue": {
+      "label": "Sat in the queue (318,124)",
+      "color": "#8A94A0"
+    },
+    "severity:low": {
+      "label": "Low (247,900)",
+      "color": "#8A94A0"
+    },
+    "cause:dns": {
+      "label": "It was DNS (111,497)",
+      "color": "#7A4FA3"
+    },
+    "resolution:restarted": {
+      "label": "Restarted it (155,640)",
+      "color": "#5C6672"
+    },
+    "cause:disk": {
+      "label": "A disk was full (43,017)",
+      "color": "#E8730C"
+    },
+    "response:tuesday": {
+      "label": "Noticed on Tuesday (29,575)",
+      "color": "#8A94A0"
+    },
+    "hypothesis:intern": {
+      "label": "\"It's the intern\" (29,575)",
+      "color": "#8A94A0"
+    },
+    "cause:printer": {
+      "label": "It was the printer (29,575)",
+      "color": "#1F6FB2"
+    },
+    "severity:quoted": {
+      "label": "\"Critical\" (56,847)",
+      "color": "#8A94A0"
+    },
+    "response:paged": {
+      "label": "Woke somebody at 3am (19,301)",
+      "color": "#8A94A0"
+    },
+    "resolution:postmortem": {
+      "label": "Postmortem nobody read (10,637)",
+      "color": "#5C6672"
+    },
+    "cause:cert": {
+      "label": "Somebody's cert expired (4,910)",
+      "color": "#C7302B"
+    },
+    "hypothesis:cosmic": {
+      "label": "\"Cosmic rays\" (48)",
+      "color": "#8A94A0"
+    },
+    "resolution:stillopen": {
+      "label": "Still open (322)",
+      "color": "#5C6672"
+    },
+    "severity:real": {
+      "label": "Actually critical (5,253)",
+      "color": "#8A94A0"
+    }
+  },
+  "links": [
+    {
+      "from": "src:alerts",
+      "to": "severity:informational",
+      "flow": 2090000
+    },
+    {
+      "from": "severity:informational",
+      "to": "response:autoclosed",
+      "flow": 1912000
+    },
+    {
+      "from": "response:autoclosed",
+      "to": "hypothesis:network",
+      "flow": 1631000
+    },
+    {
+      "from": "hypothesis:network",
+      "to": "cause:fine",
+      "flow": 1809000
+    },
+    {
+      "from": "cause:fine",
+      "to": "resolution:wontfix",
+      "flow": 2211001
+    },
+    {
+      "from": "response:autoclosed",
+      "to": "hypothesis:deploy",
+      "flow": 402000
+    },
+    {
+      "from": "hypothesis:deploy",
+      "to": "cause:fine",
+      "flow": 402000
+    },
+    {
+      "from": "severity:informational",
+      "to": "response:queue",
+      "flow": 178000
+    },
+    {
+      "from": "response:queue",
+      "to": "hypothesis:network",
+      "flow": 245300
+    },
+    {
+      "from": "src:alerts",
+      "to": "severity:low",
+      "flow": 247900
+    },
+    {
+      "from": "severity:low",
+      "to": "response:autoclosed",
+      "flow": 121000
+    },
+    {
+      "from": "severity:low",
+      "to": "response:queue",
+      "flow": 104500
+    },
+    {
+      "from": "hypothesis:network",
+      "to": "cause:dns",
+      "flow": 80450
+    },
+    {
+      "from": "cause:dns",
+      "to": "resolution:restarted",
+      "flow": 108600
+    },
+    {
+      "from": "response:queue",
+      "to": "hypothesis:deploy",
+      "flow": 72777
+    },
+    {
+      "from": "hypothesis:deploy",
+      "to": "cause:disk",
+      "flow": 43017
+    },
+    {
+      "from": "cause:disk",
+      "to": "resolution:restarted",
+      "flow": 42740
+    },
+    {
+      "from": "severity:low",
+      "to": "response:tuesday",
+      "flow": 22400
+    },
+    {
+      "from": "response:tuesday",
+      "to": "hypothesis:intern",
+      "flow": 29575
+    },
+    {
+      "from": "hypothesis:intern",
+      "to": "cause:printer",
+      "flow": 29575
+    },
+    {
+      "from": "cause:printer",
+      "to": "resolution:wontfix",
+      "flow": 22400
+    },
+    {
+      "from": "src:alerts",
+      "to": "severity:quoted",
+      "flow": 56847
+    },
+    {
+      "from": "severity:quoted",
+      "to": "response:queue",
+      "flow": 35347
+    },
+    {
+      "from": "hypothesis:deploy",
+      "to": "cause:dns",
+      "flow": 31000
+    },
+    {
+      "from": "severity:quoted",
+      "to": "response:paged",
+      "flow": 14600
+    },
+    {
+      "from": "response:paged",
+      "to": "hypothesis:network",
+      "flow": 18060
+    },
+    {
+      "from": "severity:quoted",
+      "to": "response:tuesday",
+      "flow": 6900
+    },
+    {
+      "from": "cause:printer",
+      "to": "resolution:postmortem",
+      "flow": 6900
+    },
+    {
+      "from": "hypothesis:network",
+      "to": "cause:cert",
+      "flow": 4910
+    },
+    {
+      "from": "cause:cert",
+      "to": "resolution:restarted",
+      "flow": 4300
+    },
+    {
+      "from": "response:queue",
+      "to": "hypothesis:cosmic",
+      "flow": 47
+    },
+    {
+      "from": "hypothesis:cosmic",
+      "to": "cause:dns",
+      "flow": 47
+    },
+    {
+      "from": "cause:dns",
+      "to": "resolution:stillopen",
+      "flow": 47
+    },
+    {
+      "from": "src:alerts",
+      "to": "severity:real",
+      "flow": 5253
+    },
+    {
+      "from": "severity:real",
+      "to": "response:paged",
+      "flow": 4701
+    },
+    {
+      "from": "cause:dns",
+      "to": "resolution:postmortem",
+      "flow": 2850
+    },
+    {
+      "from": "response:paged",
+      "to": "hypothesis:deploy",
+      "flow": 1240
+    },
+    {
+      "from": "cause:cert",
+      "to": "resolution:postmortem",
+      "flow": 610
+    },
+    {
+      "from": "severity:real",
+      "to": "response:tuesday",
+      "flow": 275
+    },
+    {
+      "from": "cause:printer",
+      "to": "resolution:stillopen",
+      "flow": 275
+    },
+    {
+      "from": "severity:real",
+      "to": "response:queue",
+      "flow": 277
+    },
+    {
+      "from": "cause:disk",
+      "to": "resolution:postmortem",
+      "flow": 277
+    },
+    {
+      "from": "response:paged",
+      "to": "hypothesis:cosmic",
+      "flow": 1
+    },
+    {
+      "from": "hypothesis:cosmic",
+      "to": "cause:fine",
+      "flow": 1
+    }
+  ]
+}

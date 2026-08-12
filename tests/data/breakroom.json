@@ -1,0 +1,331 @@
+{
+  "key": "breakroom",
+  "title": "Break Room Forensics",
+  "nodes": {
+    "src:fridge": {
+      "label": "The Fridge (480,000 g)",
+      "color": "#8A94A0"
+    },
+    "container:lunchbag": {
+      "label": "Someone's lunch bag (162,800 g)",
+      "color": "#3F9C35"
+    },
+    "owner:labeled": {
+      "label": "Name written on it (261,697 g)",
+      "color": "#8A94A0"
+    },
+    "age:sameday": {
+      "label": "Gone the same day (172,347 g)",
+      "color": "#8A94A0"
+    },
+    "action:eaten_owner": {
+      "label": "Eaten by its rightful owner (225,197 g)",
+      "color": "#8A94A0"
+    },
+    "fate:digested": {
+      "label": "Digested (335,497 g)",
+      "color": "#5C6672"
+    },
+    "age:week": {
+      "label": "Lasted a week (163,150 g)",
+      "color": "#8A94A0"
+    },
+    "owner:note": {
+      "label": "Passive-aggressive note attached (51,000 g)",
+      "color": "#8A94A0"
+    },
+    "action:eaten_other": {
+      "label": "Eaten by someone else entirely (110,300 g)",
+      "color": "#8A94A0"
+    },
+    "owner:unclaimed": {
+      "label": "Claimed by nobody, ever (127,603 g)",
+      "color": "#8A94A0"
+    },
+    "age:quarter": {
+      "label": "Survived a full quarter (92,250 g)",
+      "color": "#8A94A0"
+    },
+    "action:purged": {
+      "label": "Removed in the great fridge purge (126,000 g)",
+      "color": "#8A94A0"
+    },
+    "fate:biohazard": {
+      "label": "Biohazard bin (113,900 g)",
+      "color": "#5C6672"
+    },
+    "container:tupperware": {
+      "label": "Unlabelled Tupperware (144,250 g)",
+      "color": "#7A4FA3"
+    },
+    "owner:threat": {
+      "label": "\"DO NOT TOUCH — I MEAN IT\" (39,700 g)",
+      "color": "#8A94A0"
+    },
+    "age:geologic": {
+      "label": "Geologic timescale (52,253 g)",
+      "color": "#8A94A0"
+    },
+    "container:foil": {
+      "label": "A shape wrapped in foil (70,347 g)",
+      "color": "#E8730C"
+    },
+    "action:sentient": {
+      "label": "Achieved sentience (18,503 g)",
+      "color": "#8A94A0"
+    },
+    "container:jar": {
+      "label": "Jar of indeterminate purpose (36,550 g)",
+      "color": "#1F6FB2"
+    },
+    "fate:still_there": {
+      "label": "Still in there right now (30,603 g)",
+      "color": "#5C6672"
+    },
+    "container:cake": {
+      "label": "Leftover birthday cake (66,050 g)",
+      "color": "#C7302B"
+    },
+    "container:mayo": {
+      "label": "The communal mayonnaise, vintage unknown (3 g)",
+      "color": "#0E8F9E"
+    }
+  },
+  "links": [
+    {
+      "from": "src:fridge",
+      "to": "container:lunchbag",
+      "flow": 162800
+    },
+    {
+      "from": "container:lunchbag",
+      "to": "owner:labeled",
+      "flow": 137000
+    },
+    {
+      "from": "owner:labeled",
+      "to": "age:sameday",
+      "flow": 156847
+    },
+    {
+      "from": "age:sameday",
+      "to": "action:eaten_owner",
+      "flow": 120347
+    },
+    {
+      "from": "action:eaten_owner",
+      "to": "fate:digested",
+      "flow": 225197
+    },
+    {
+      "from": "owner:labeled",
+      "to": "age:week",
+      "flow": 104850
+    },
+    {
+      "from": "age:week",
+      "to": "action:eaten_owner",
+      "flow": 104850
+    },
+    {
+      "from": "container:lunchbag",
+      "to": "owner:note",
+      "flow": 18500
+    },
+    {
+      "from": "owner:note",
+      "to": "age:week",
+      "flow": 46900
+    },
+    {
+      "from": "age:week",
+      "to": "action:eaten_other",
+      "flow": 58300
+    },
+    {
+      "from": "action:eaten_other",
+      "to": "fate:digested",
+      "flow": 110300
+    },
+    {
+      "from": "container:lunchbag",
+      "to": "owner:unclaimed",
+      "flow": 7300
+    },
+    {
+      "from": "owner:unclaimed",
+      "to": "age:quarter",
+      "flow": 84950
+    },
+    {
+      "from": "age:quarter",
+      "to": "action:purged",
+      "flow": 92250
+    },
+    {
+      "from": "action:purged",
+      "to": "fate:biohazard",
+      "flow": 105000
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:tupperware",
+      "flow": 144250
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:labeled",
+      "flow": 62000
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:note",
+      "flow": 23000
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:threat",
+      "flow": 15500
+    },
+    {
+      "from": "owner:threat",
+      "to": "age:sameday",
+      "flow": 15500
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:unclaimed",
+      "flow": 43750
+    },
+    {
+      "from": "owner:unclaimed",
+      "to": "age:geologic",
+      "flow": 31253
+    },
+    {
+      "from": "age:geologic",
+      "to": "action:purged",
+      "flow": 33750
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:foil",
+      "flow": 70347
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:unclaimed",
+      "flow": 52900
+    },
+    {
+      "from": "age:geologic",
+      "to": "action:sentient",
+      "flow": 18503
+    },
+    {
+      "from": "action:sentient",
+      "to": "fate:biohazard",
+      "flow": 8900
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:note",
+      "flow": 5400
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:threat",
+      "flow": 3200
+    },
+    {
+      "from": "owner:threat",
+      "to": "age:quarter",
+      "flow": 3200
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:labeled",
+      "flow": 8847
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:jar",
+      "flow": 36550
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:threat",
+      "flow": 21000
+    },
+    {
+      "from": "owner:threat",
+      "to": "age:geologic",
+      "flow": 21000
+    },
+    {
+      "from": "action:purged",
+      "to": "fate:still_there",
+      "flow": 21000
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:unclaimed",
+      "flow": 9600
+    },
+    {
+      "from": "action:sentient",
+      "to": "fate:still_there",
+      "flow": 9603
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:note",
+      "flow": 4100
+    },
+    {
+      "from": "owner:note",
+      "to": "age:quarter",
+      "flow": 4100
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:labeled",
+      "flow": 1850
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:cake",
+      "flow": 66050
+    },
+    {
+      "from": "container:cake",
+      "to": "owner:labeled",
+      "flow": 52000
+    },
+    {
+      "from": "age:sameday",
+      "to": "action:eaten_other",
+      "flow": 52000
+    },
+    {
+      "from": "container:cake",
+      "to": "owner:unclaimed",
+      "flow": 14050
+    },
+    {
+      "from": "owner:unclaimed",
+      "to": "age:week",
+      "flow": 11400
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:mayo",
+      "flow": 3
+    },
+    {
+      "from": "container:mayo",
+      "to": "owner:unclaimed",
+      "flow": 3
+    }
+  ]
+}

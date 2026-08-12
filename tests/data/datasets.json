@@ -1,0 +1,70 @@
+{
+  "generatedBy": "tools/generate_golden.mjs",
+  "datasets": [
+    {
+      "key": "breakroom",
+      "title": "Break Room Forensics",
+      "blurb": "Six columns of dense sharing. An audit of the office refrigerator, conducted under protest.",
+      "orderSensitive": false,
+      "preview": {
+        "width": 1760,
+        "height": 480
+      },
+      "nodes": 22,
+      "links": 47,
+      "maxColumn": 5
+    },
+    {
+      "key": "catday",
+      "title": "86,400 Seconds in the Life of a Cat",
+      "blurb": "Five columns conserved to exactly one day, and the only dataset where input order changes the layout.",
+      "orderSensitive": true,
+      "preview": {
+        "width": 1420,
+        "height": 440
+      },
+      "nodes": 20,
+      "links": 46,
+      "maxColumn": 4
+    },
+    {
+      "key": "groupchat",
+      "title": "The Group Chat Decides Where to Get Brunch",
+      "blurb": "A pure fan-out tree with no shared middle nodes — the control case where the overlap sweep has nothing to do.",
+      "orderSensitive": false,
+      "preview": {
+        "width": 1420,
+        "height": 440
+      },
+      "nodes": 29,
+      "links": 28,
+      "maxColumn": 4
+    },
+    {
+      "key": "itwasdns",
+      "title": "It Was DNS",
+      "blurb": "Strongly convergent, six orders of magnitude. 2.4 million alerts funnelled down to what was actually wrong.",
+      "orderSensitive": false,
+      "preview": {
+        "width": 1640,
+        "height": 480
+      },
+      "nodes": 22,
+      "links": 44,
+      "maxColumn": 5
+    },
+    {
+      "key": "sourdough",
+      "title": "The Sourdough Dynasty",
+      "blurb": "Diamonds that split and rejoin, plus equal sibling flows that the earlier tie-breaks resolve anyway.",
+      "orderSensitive": false,
+      "preview": {
+        "width": 1420,
+        "height": 440
+      },
+      "nodes": 17,
+      "links": 30,
+      "maxColumn": 4
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "_comment": [
+    "The Sourdough Dynasty — a genealogy of one starter and the fates of its heirs.",
+    "",
+    "Two properties, one of which is a negative result worth keeping.",
+    "",
+    "First, diamonds: flows split and rejoin on the same downstream node — both",
+    "feeding regimes reach 'an actual loaf', and three of the four generations reach",
+    "'hooch'. No other fixture has split-and-rejoin at this density, and it is what",
+    "makes link stacking order (by the vertical centre of the band at the far end)",
+    "observable on a small graph.",
+    "",
+    "Second, and this is the deliberate part: 'gifted onward' splits 3,300 / 3,300",
+    "between religious and occasional feeding, so two sibling links carry *equal*",
+    "flow. It is tempting to assume that makes the diagram sensitive to input order,",
+    "since input order is the last of the four tie-breaks (subtree size, then",
+    "degree, then flow descending, then input order). It does not: reversing this",
+    "dataset's link list produces identical geometry, because subtree size and",
+    "degree separate the two candidates long before flow is compared.",
+    "",
+    "So this fixture is the standing counter-example to 'equal flows make order",
+    "matter'. The dataset that *is* order-sensitive is catday, which has no equal",
+    "sibling flows at all — see its `orderSensitive` note. Keeping both pinned is",
+    "what documents that the chain is a sequence of stable sorts rather than one",
+    "combined key.",
+    "",
+    "A forgotten starter at 5g gives the thin node for the label drop rule.",
+    "",
+    "Flows are grams of flour and conserve to 64,000 exactly.",
+    "",
+    "Regenerate the derived files with: node tools/generate_golden.mjs"
+  ],
+  "key": "sourdough",
+  "title": "The Sourdough Dynasty",
+  "blurb": "Diamonds that split and rejoin, plus equal sibling flows that the earlier tie-breaks resolve anyway.",
+  "orderSensitive": false,
+  "unit": " g",
+  "source": "flour",
+  "layers": ["src", "generation", "care", "product", "fate"],
+  "rows": [
+    { "path": ["original", "religious", "loaf", "eaten"], "flow": 18000 },
+    { "path": ["original", "religious", "photo", "compost"], "flow": 4000 },
+    { "path": ["original", "occasional", "puck", "compost"], "flow": 6500 },
+    { "path": ["original", "occasional", "hooch", "fridge"], "flow": 2200 },
+    { "path": ["coworker", "religious", "loaf", "eaten"], "flow": 4000 },
+    { "path": ["coworker", "occasional", "loaf", "eaten"], "flow": 4000 },
+    { "path": ["coworker", "march", "hooch", "fridge"], "flow": 1500 },
+    { "path": ["coworker", "religious", "puck", "compost"], "flow": 5995 },
+    { "path": ["onward", "religious", "loaf", "regifted"], "flow": 3300 },
+    { "path": ["onward", "occasional", "puck", "compost"], "flow": 3300 },
+    { "path": ["onward", "march", "hooch", "fridge"], "flow": 900 },
+    { "path": ["backup", "march", "hooch", "fridge"], "flow": 7000 },
+    { "path": ["backup", "march", "puck", "compost"], "flow": 2100 },
+    { "path": ["backup", "occasional", "photo", "compost"], "flow": 1200 },
+    { "path": ["forgotten", "march", "hooch", "fridge"], "flow": 5 }
+  ],
+  "names": {
+    "src:flour": "Flour",
+    "generation:original": "The original jar, March 2020",
+    "generation:coworker": "Gifted to a coworker",
+    "generation:onward": "Gifted onward, twice",
+    "generation:backup": "The neglected backup",
+    "generation:forgotten": "Forgotten behind the mayonnaise",
+    "care:religious": "Fed religiously",
+    "care:occasional": "Fed when remembered",
+    "care:march": "Fed once, in March",
+    "product:loaf": "An actual loaf of bread",
+    "product:puck": "A dense and blameless hockey puck",
+    "product:photo": "A photograph posted online",
+    "product:hooch": "Hooch",
+    "fate:eaten": "Eaten",
+    "fate:compost": "Composted",
+    "fate:fridge": "Still in the fridge",
+    "fate:regifted": "Made somebody else's problem"
+  },
+  "colors": {
+    "default": "#8A94A0",
+    "colorBy": "generation",
+    "layers": {
+      "fate": "#5C6672"
+    }
+  },
+  "render": {
+    "cssWidth": 1200,
+    "cssHeight": 420,
+    "devicePixelRatio": 3
+  },
+  "preview": {
+    "width": 1420,
+    "height": 440
+  }
+}

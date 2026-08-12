@@ -1,0 +1,675 @@
+{
+  "generatedBy": "tools/generate_golden.mjs",
+  "key": "itwasdns",
+  "title": "It Was DNS",
+  "upstream": {
+    "library": "chartjs-chart-sankey",
+    "version": "0.15.0",
+    "chartjs": "4.5.1"
+  },
+  "render": {
+    "cssWidth": 1400,
+    "cssHeight": 460,
+    "devicePixelRatio": 3,
+    "backingStoreHeight": 1380,
+    "nodeWidth": 10,
+    "nodePadding": 10,
+    "borderWidth": 1,
+    "padding": {
+      "top": 3,
+      "right": 13,
+      "bottom": 3,
+      "left": 3
+    }
+  },
+  "maxColumn": 5,
+  "totalHeight": 2486956.5217391304,
+  "chartArea": {
+    "left": 3,
+    "right": 1387,
+    "top": 3,
+    "bottom": 457
+  },
+  "nodes": {
+    "src:alerts": {
+      "column": 0,
+      "y": 0,
+      "size": 2400000,
+      "inflow": 0,
+      "outflow": 2400000
+    },
+    "severity:informational": {
+      "column": 1,
+      "y": 0,
+      "size": 2090000,
+      "inflow": 2090000,
+      "outflow": 2090000
+    },
+    "response:autoclosed": {
+      "column": 2,
+      "y": 0,
+      "size": 2033000,
+      "inflow": 2033000,
+      "outflow": 2033000
+    },
+    "hypothesis:network": {
+      "column": 3,
+      "y": 0,
+      "size": 1894360,
+      "inflow": 1894360,
+      "outflow": 1894360
+    },
+    "cause:fine": {
+      "column": 4,
+      "y": 0,
+      "size": 2211001,
+      "inflow": 2211001,
+      "outflow": 2211001
+    },
+    "resolution:wontfix": {
+      "column": 5,
+      "y": 0,
+      "size": 2233401,
+      "inflow": 2233401,
+      "outflow": 0
+    },
+    "hypothesis:deploy": {
+      "column": 3,
+      "y": 1911751.3043478262,
+      "size": 476017,
+      "inflow": 476017,
+      "outflow": 476017
+    },
+    "response:queue": {
+      "column": 2,
+      "y": 2050391.3043478262,
+      "size": 318124,
+      "inflow": 318124,
+      "outflow": 318124
+    },
+    "severity:low": {
+      "column": 1,
+      "y": 2107391.304347826,
+      "size": 247900,
+      "inflow": 247900,
+      "outflow": 247900
+    },
+    "cause:dns": {
+      "column": 4,
+      "y": 2358068.217391304,
+      "size": 111497,
+      "inflow": 111497,
+      "outflow": 111497
+    },
+    "resolution:restarted": {
+      "column": 5,
+      "y": 2250792.304347826,
+      "size": 155640,
+      "inflow": 155640,
+      "outflow": 0
+    },
+    "cause:disk": {
+      "column": 4,
+      "y": 2275358.6086956523,
+      "size": 43017,
+      "inflow": 43017,
+      "outflow": 43017
+    },
+    "response:tuesday": {
+      "column": 2,
+      "y": 2385906.6086956523,
+      "size": 29575,
+      "inflow": 29575,
+      "outflow": 29575
+    },
+    "hypothesis:intern": {
+      "column": 3,
+      "y": 2422598.913043478,
+      "size": 29575,
+      "inflow": 29575,
+      "outflow": 29575
+    },
+    "cause:printer": {
+      "column": 4,
+      "y": 2228392.304347826,
+      "size": 29575,
+      "inflow": 29575,
+      "outflow": 29575
+    },
+    "severity:quoted": {
+      "column": 1,
+      "y": 2372682.6086956523,
+      "size": 56847,
+      "inflow": 56847,
+      "outflow": 56847
+    },
+    "response:paged": {
+      "column": 2,
+      "y": 2432872.913043478,
+      "size": 19301,
+      "inflow": 19301,
+      "outflow": 19301
+    },
+    "resolution:postmortem": {
+      "column": 5,
+      "y": 2458606.217391304,
+      "size": 10637,
+      "inflow": 10637,
+      "outflow": 0
+    },
+    "cause:cert": {
+      "column": 4,
+      "y": 2335766.913043478,
+      "size": 4910,
+      "inflow": 4910,
+      "outflow": 4910
+    },
+    "hypothesis:cosmic": {
+      "column": 3,
+      "y": 2405159.6086956523,
+      "size": 48,
+      "inflow": 48,
+      "outflow": 48
+    },
+    "resolution:stillopen": {
+      "column": 5,
+      "y": 2486634.5217391304,
+      "size": 322,
+      "inflow": 322,
+      "outflow": 0
+    },
+    "severity:real": {
+      "column": 1,
+      "y": 2446920.913043478,
+      "size": 5253,
+      "inflow": 5253,
+      "outflow": 5253
+    }
+  },
+  "links": [
+    {
+      "from": "src:alerts",
+      "to": "severity:informational",
+      "flow": 2090000,
+      "offset": 0,
+      "x": 14,
+      "x2": 278.8,
+      "y": 3,
+      "y2": 3,
+      "height": 381.5346153846154
+    },
+    {
+      "from": "severity:informational",
+      "to": "response:autoclosed",
+      "flow": 1912000,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 3,
+      "y2": 3,
+      "height": 349.0402797202797
+    },
+    {
+      "from": "response:autoclosed",
+      "to": "hypothesis:network",
+      "flow": 1631000,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 3,
+      "y2": 3,
+      "height": 297.743041958042
+    },
+    {
+      "from": "hypothesis:network",
+      "to": "cause:fine",
+      "flow": 1809000,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 3,
+      "y2": 3,
+      "height": 330.23737762237766
+    },
+    {
+      "from": "cause:fine",
+      "to": "resolution:wontfix",
+      "flow": 2211001,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 3,
+      "y2": 3,
+      "height": 403.62364409090907
+    },
+    {
+      "from": "response:autoclosed",
+      "to": "hypothesis:deploy",
+      "flow": 402000,
+      "offset": 1631000,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 300.743041958042,
+      "y2": 351.99487972027976,
+      "height": 73.38608391608386
+    },
+    {
+      "from": "hypothesis:deploy",
+      "to": "cause:fine",
+      "flow": 402000,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 351.99487972027976,
+      "y2": 333.23737762237766,
+      "height": 73.38608391608392
+    },
+    {
+      "from": "severity:informational",
+      "to": "response:queue",
+      "flow": 178000,
+      "offset": 1912000,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 352.0402797202797,
+      "y2": 377.3039510489511,
+      "height": 32.494335664335665
+    },
+    {
+      "from": "response:queue",
+      "to": "hypothesis:network",
+      "flow": 245300,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 377.3039510489511,
+      "y2": 300.743041958042,
+      "height": 44.780115384615385
+    },
+    {
+      "from": "src:alerts",
+      "to": "severity:low",
+      "flow": 247900,
+      "offset": 2090000,
+      "x": 14,
+      "x2": 278.8,
+      "y": 384.5346153846154,
+      "y2": 387.7094405594406,
+      "height": 45.25475174825175
+    },
+    {
+      "from": "severity:low",
+      "to": "response:autoclosed",
+      "flow": 121000,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 387.7094405594406,
+      "y2": 352.0402797202797,
+      "height": 22.088846153846077
+    },
+    {
+      "from": "severity:low",
+      "to": "response:queue",
+      "flow": 104500,
+      "offset": 121000,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 409.7982867132867,
+      "y2": 409.7982867132867,
+      "height": 19.076730769230835
+    },
+    {
+      "from": "hypothesis:network",
+      "to": "cause:dns",
+      "flow": 80450,
+      "offset": 1813910,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 334.13371013986017,
+      "y2": 433.4711245804196,
+      "height": 14.686344405594411
+    },
+    {
+      "from": "cause:dns",
+      "to": "resolution:restarted",
+      "flow": 108600,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 433.4711245804196,
+      "y2": 422.47491122377625,
+      "height": 19.825195804195744
+    },
+    {
+      "from": "response:queue",
+      "to": "hypothesis:deploy",
+      "flow": 72777,
+      "offset": 245300,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 422.0840664335665,
+      "y2": 425.3809636363637,
+      "height": 13.28561947552447
+    },
+    {
+      "from": "hypothesis:deploy",
+      "to": "cause:disk",
+      "flow": 43017,
+      "offset": 402000,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 425.3809636363637,
+      "y2": 418.3722830769231,
+      "height": 7.852858636363635
+    },
+    {
+      "from": "cause:disk",
+      "to": "resolution:restarted",
+      "flow": 42740,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 418.3722830769231,
+      "y2": 413.8876440909091,
+      "height": 7.802291608391613
+    },
+    {
+      "from": "severity:low",
+      "to": "response:tuesday",
+      "flow": 22400,
+      "offset": 225500,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 428.87501748251753,
+      "y2": 438.5530910489511,
+      "height": 4.08917482517478
+    },
+    {
+      "from": "response:tuesday",
+      "to": "hypothesis:intern",
+      "flow": 29575,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 438.5530910489511,
+      "y2": 445.25136101398596,
+      "height": 5.39898863636364
+    },
+    {
+      "from": "hypothesis:intern",
+      "to": "cause:printer",
+      "flow": 29575,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 445.25136101398596,
+      "y2": 409.7984692657343,
+      "height": 5.39898863636364
+    },
+    {
+      "from": "cause:printer",
+      "to": "resolution:wontfix",
+      "flow": 22400,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 409.7984692657343,
+      "y2": 406.62364409090907,
+      "height": 4.08917482517478
+    },
+    {
+      "from": "src:alerts",
+      "to": "severity:quoted",
+      "flow": 56847,
+      "offset": 2337900,
+      "x": 14,
+      "x2": 278.8,
+      "y": 429.78936713286714,
+      "y2": 436.13901748251754,
+      "height": 10.37755898601398
+    },
+    {
+      "from": "severity:quoted",
+      "to": "response:queue",
+      "flow": 35347,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 436.13901748251754,
+      "y2": 428.87501748251753,
+      "height": 6.452681363636373
+    },
+    {
+      "from": "hypothesis:deploy",
+      "to": "cause:dns",
+      "flow": 31000,
+      "offset": 445017,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 433.2338222727273,
+      "y2": 448.15746898601395,
+      "height": 5.659125874125891
+    },
+    {
+      "from": "severity:quoted",
+      "to": "response:paged",
+      "flow": 14600,
+      "offset": 42247,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 443.8513107342658,
+      "y2": 447.12690486013986,
+      "height": 2.665265734265745
+    },
+    {
+      "from": "response:paged",
+      "to": "hypothesis:network",
+      "flow": 18060,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 447.12690486013986,
+      "y2": 345.5231573426574,
+      "height": 3.2968972027971972
+    },
+    {
+      "from": "severity:quoted",
+      "to": "response:tuesday",
+      "flow": 6900,
+      "offset": 35347,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 442.5916988461539,
+      "y2": 442.64226587412594,
+      "height": 1.2596118881118628
+    },
+    {
+      "from": "cause:printer",
+      "to": "resolution:postmortem",
+      "flow": 6900,
+      "offset": 22400,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 413.8876440909091,
+      "y2": 451.82458255244757,
+      "height": 1.2596118881119196
+    },
+    {
+      "from": "hypothesis:network",
+      "to": "cause:cert",
+      "flow": 4910,
+      "offset": 1809000,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 333.23737762237766,
+      "y2": 429.39996688811186,
+      "height": 0.8963325174825059
+    },
+    {
+      "from": "cause:cert",
+      "to": "resolution:restarted",
+      "flow": 4300,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 429.39996688811186,
+      "y2": 421.68993569930075,
+      "height": 0.7849755244755556
+    },
+    {
+      "from": "response:queue",
+      "to": "hypothesis:cosmic",
+      "flow": 47,
+      "offset": 318077,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 435.36968590909095,
+      "y2": 442.0677733216783,
+      "height": 0.008579965034982706
+    },
+    {
+      "from": "hypothesis:cosmic",
+      "to": "cause:dns",
+      "flow": 47,
+      "offset": 1,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 442.0679558741259,
+      "y2": 453.81659486013984,
+      "height": 0.008579965034982706
+    },
+    {
+      "from": "cause:dns",
+      "to": "resolution:stillopen",
+      "flow": 47,
+      "offset": 111450,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 453.81659486013984,
+      "y2": 456.991420034965,
+      "height": 0.008579965034982706
+    },
+    {
+      "from": "src:alerts",
+      "to": "severity:real",
+      "flow": 5253,
+      "offset": 2394747,
+      "x": 14,
+      "x2": 278.8,
+      "y": 440.1669261188811,
+      "y2": 449.69140164335664,
+      "height": 0.9589480069930119
+    },
+    {
+      "from": "severity:real",
+      "to": "response:paged",
+      "flow": 4701,
+      "offset": 552,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 449.79217059440555,
+      "y2": 449.79217059440555,
+      "height": 0.8581790559440492
+    },
+    {
+      "from": "cause:dns",
+      "to": "resolution:postmortem",
+      "flow": 2850,
+      "offset": 108600,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 453.29632038461534,
+      "y2": 453.2461184615384,
+      "height": 0.5202744755245021
+    },
+    {
+      "from": "response:paged",
+      "to": "hypothesis:deploy",
+      "flow": 1240,
+      "offset": 18060,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 450.42380206293706,
+      "y2": 438.66658311188814,
+      "height": 0.22636503496499927
+    },
+    {
+      "from": "cause:cert",
+      "to": "resolution:postmortem",
+      "flow": 610,
+      "offset": 4300,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 430.1849424125874,
+      "y2": 453.13476146853145,
+      "height": 0.11135699300695023
+    },
+    {
+      "from": "severity:real",
+      "to": "response:tuesday",
+      "flow": 275,
+      "offset": 277,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 449.74196867132866,
+      "y2": 443.9018777622378,
+      "height": 0.05020192307688376
+    },
+    {
+      "from": "cause:printer",
+      "to": "resolution:stillopen",
+      "flow": 275,
+      "offset": 29300,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 415.147255979021,
+      "y2": 456.94121811188813,
+      "height": 0.05020192307688376
+    },
+    {
+      "from": "severity:real",
+      "to": "response:queue",
+      "flow": 277,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 449.69140164335664,
+      "y2": 435.32769884615385,
+      "height": 0.05056702797202206
+    },
+    {
+      "from": "cause:disk",
+      "to": "resolution:postmortem",
+      "flow": 277,
+      "offset": 42740,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 426.1745746853147,
+      "y2": 453.08419444055943,
+      "height": 0.05056702797202206
+    },
+    {
+      "from": "response:paged",
+      "to": "hypothesis:cosmic",
+      "flow": 1,
+      "offset": 19300,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 450.65016709790206,
+      "y2": 442.0763532867133,
+      "height": 0.0001825524475407292
+    },
+    {
+      "from": "hypothesis:cosmic",
+      "to": "cause:fine",
+      "flow": 1,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 442.0677733216783,
+      "y2": 406.6234615384615,
+      "height": 0.0001825524475975726
+    }
+  ]
+}

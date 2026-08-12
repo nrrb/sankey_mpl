@@ -1,0 +1,486 @@
+{
+  "generatedBy": "tools/generate_golden.mjs",
+  "key": "sourdough",
+  "title": "The Sourdough Dynasty",
+  "upstream": {
+    "library": "chartjs-chart-sankey",
+    "version": "0.15.0",
+    "chartjs": "4.5.1"
+  },
+  "render": {
+    "cssWidth": 1200,
+    "cssHeight": 420,
+    "devicePixelRatio": 3,
+    "backingStoreHeight": 1260,
+    "nodeWidth": 10,
+    "nodePadding": 10,
+    "borderWidth": 1,
+    "padding": {
+      "top": 3,
+      "right": 13,
+      "bottom": 3,
+      "left": 3
+    }
+  },
+  "maxColumn": 4,
+  "totalHeight": 66539.68254072222,
+  "chartArea": {
+    "left": 3,
+    "right": 1187,
+    "top": 3,
+    "bottom": 417
+  },
+  "nodes": {
+    "src:flour": {
+      "column": 0,
+      "y": 0,
+      "size": 64000,
+      "inflow": 0,
+      "outflow": 64000
+    },
+    "generation:original": {
+      "column": 1,
+      "y": 11320.873015888888,
+      "size": 30700,
+      "inflow": 30700,
+      "outflow": 30700
+    },
+    "care:religious": {
+      "column": 2,
+      "y": 12520.873015888888,
+      "size": 35295,
+      "inflow": 35295,
+      "outflow": 35295
+    },
+    "product:loaf": {
+      "column": 3,
+      "y": 36731.74603177778,
+      "size": 29300,
+      "inflow": 29300,
+      "outflow": 29300
+    },
+    "fate:eaten": {
+      "column": 4,
+      "y": 36731.74603277778,
+      "size": 26000,
+      "inflow": 26000,
+      "outflow": 0
+    },
+    "product:photo": {
+      "column": 3,
+      "y": 31023.809523833334,
+      "size": 5200,
+      "inflow": 5200,
+      "outflow": 5200
+    },
+    "fate:compost": {
+      "column": 4,
+      "y": 12620.873016888889,
+      "size": 23095,
+      "inflow": 23095,
+      "outflow": 0
+    },
+    "care:occasional": {
+      "column": 2,
+      "y": 48323.80952383333,
+      "size": 17200,
+      "inflow": 17200,
+      "outflow": 17200
+    },
+    "product:puck": {
+      "column": 3,
+      "y": 12620.873015888888,
+      "size": 17895,
+      "inflow": 17895,
+      "outflow": 17895
+    },
+    "product:hooch": {
+      "column": 3,
+      "y": 0,
+      "size": 11605,
+      "inflow": 11605,
+      "outflow": 11605
+    },
+    "fate:fridge": {
+      "column": 4,
+      "y": 0,
+      "size": 11605,
+      "inflow": 11605,
+      "outflow": 0
+    },
+    "generation:coworker": {
+      "column": 1,
+      "y": 42528.80952383333,
+      "size": 15495,
+      "inflow": 15495,
+      "outflow": 15495
+    },
+    "care:march": {
+      "column": 2,
+      "y": 0,
+      "size": 11505,
+      "inflow": 11505,
+      "outflow": 11505
+    },
+    "generation:onward": {
+      "column": 1,
+      "y": 58531.74603177778,
+      "size": 7500,
+      "inflow": 7500,
+      "outflow": 7500
+    },
+    "fate:regifted": {
+      "column": 4,
+      "y": 63239.68254072222,
+      "size": 3300,
+      "inflow": 3300,
+      "outflow": 0
+    },
+    "generation:backup": {
+      "column": 1,
+      "y": 512.9365079444444,
+      "size": 10300,
+      "inflow": 10300,
+      "outflow": 10300
+    },
+    "generation:forgotten": {
+      "column": 1,
+      "y": 0,
+      "size": 5,
+      "inflow": 5,
+      "outflow": 5
+    }
+  },
+  "links": [
+    {
+      "from": "src:flour",
+      "to": "generation:original",
+      "flow": 30700,
+      "offset": 10305,
+      "x": 14,
+      "x2": 298,
+      "y": 67.11617604861651,
+      "y2": 73.43678673563942,
+      "height": 191.0108301496872
+    },
+    {
+      "from": "generation:original",
+      "to": "care:religious",
+      "flow": 22000,
+      "offset": 0,
+      "x": 310,
+      "x2": 594,
+      "y": 73.43678673563942,
+      "y2": 80.90300810956855,
+      "height": 136.88072518870092
+    },
+    {
+      "from": "care:religious",
+      "to": "product:loaf",
+      "flow": 25300,
+      "offset": 9995,
+      "x": 606,
+      "x2": 890,
+      "y": 143.09041030325335,
+      "y2": 231.53945610349686,
+      "height": 157.41283396700607
+    },
+    {
+      "from": "product:loaf",
+      "to": "fate:eaten",
+      "flow": 26000,
+      "offset": 0,
+      "x": 902,
+      "x2": 1186,
+      "y": 231.53945610349686,
+      "y2": 231.5394561097187,
+      "height": 161.76812976846477
+    },
+    {
+      "from": "care:religious",
+      "to": "product:photo",
+      "flow": 4000,
+      "offset": 5995,
+      "x": 606,
+      "x2": 890,
+      "y": 118.20300572348955,
+      "y2": 196.02552480629242,
+      "height": 24.887404579763796
+    },
+    {
+      "from": "product:photo",
+      "to": "fate:compost",
+      "flow": 5200,
+      "offset": 0,
+      "x": 902,
+      "x2": 1186,
+      "y": 196.02552480629242,
+      "y2": 192.86521946900282,
+      "height": 32.35362595369298
+    },
+    {
+      "from": "generation:original",
+      "to": "care:occasional",
+      "flow": 8700,
+      "offset": 22000,
+      "x": 310,
+      "x2": 594,
+      "y": 210.31751192434035,
+      "y2": 311.1297709877,
+      "height": 54.13010496098627
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:puck",
+      "flow": 9800,
+      "offset": 2200,
+      "x": 606,
+      "x2": 890,
+      "y": 317.351622132641,
+      "y2": 131.89107824235964,
+      "height": 60.9741412204213
+    },
+    {
+      "from": "product:puck",
+      "to": "fate:compost",
+      "flow": 17895,
+      "offset": 0,
+      "x": 902,
+      "x2": 1186,
+      "y": 81.52519322406265,
+      "y2": 81.52519323028449,
+      "height": 111.3400262387183
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:hooch",
+      "flow": 2200,
+      "offset": 0,
+      "x": 606,
+      "x2": 890,
+      "y": 303.6635496137709,
+      "y2": 61.516510018169654,
+      "height": 13.688072518870115
+    },
+    {
+      "from": "product:hooch",
+      "to": "fate:fridge",
+      "flow": 11605,
+      "offset": 0,
+      "x": 902,
+      "x2": 1186,
+      "y": 3,
+      "y2": 3,
+      "height": 72.20458253703974
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:coworker",
+      "flow": 15495,
+      "offset": 41005,
+      "x": 14,
+      "x2": 298,
+      "y": 258.1270061983037,
+      "y2": 267.60792222883805,
+      "height": 96.40758349086008
+    },
+    {
+      "from": "generation:coworker",
+      "to": "care:religious",
+      "flow": 9995,
+      "offset": 1500,
+      "x": 310,
+      "x2": 594,
+      "y": 276.9406989462495,
+      "y2": 217.78373329826948,
+      "height": 62.187402193684875
+    },
+    {
+      "from": "generation:coworker",
+      "to": "care:occasional",
+      "flow": 4000,
+      "offset": 11495,
+      "x": 310,
+      "x2": 594,
+      "y": 339.12810113993436,
+      "y2": 365.25987594868633,
+      "height": 24.887404579763768
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:loaf",
+      "flow": 4000,
+      "offset": 13200,
+      "x": 606,
+      "x2": 890,
+      "y": 385.7919847269915,
+      "y2": 388.95229007050295,
+      "height": 24.887404579763825
+    },
+    {
+      "from": "generation:coworker",
+      "to": "care:march",
+      "flow": 1500,
+      "offset": 0,
+      "x": 310,
+      "x2": 594,
+      "y": 267.60792222883805,
+      "y2": 59.64995467468737,
+      "height": 9.332776717411434
+    },
+    {
+      "from": "care:march",
+      "to": "product:hooch",
+      "flow": 9405,
+      "offset": 0,
+      "x": 606,
+      "x2": 890,
+      "y": 3,
+      "y2": 3,
+      "height": 58.516510018169654
+    },
+    {
+      "from": "care:religious",
+      "to": "product:puck",
+      "flow": 5995,
+      "offset": 0,
+      "x": 606,
+      "x2": 890,
+      "y": 80.90300810956855,
+      "y2": 94.59108062843865,
+      "height": 37.29999761392101
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:onward",
+      "flow": 7500,
+      "offset": 56500,
+      "x": 14,
+      "x2": 298,
+      "y": 354.5345896891638,
+      "y2": 367.1758110632096,
+      "height": 46.663883587057114
+    },
+    {
+      "from": "generation:onward",
+      "to": "care:religious",
+      "flow": 3300,
+      "offset": 900,
+      "x": 310,
+      "x2": 594,
+      "y": 372.77547709365643,
+      "y2": 279.9711354919543,
+      "height": 20.5321087783052
+    },
+    {
+      "from": "product:loaf",
+      "to": "fate:regifted",
+      "flow": 3300,
+      "offset": 26000,
+      "x": 902,
+      "x2": 1186,
+      "y": 393.30758587196163,
+      "y2": 396.46789122169486,
+      "height": 20.532108778305144
+    },
+    {
+      "from": "generation:onward",
+      "to": "care:occasional",
+      "flow": 3300,
+      "offset": 4200,
+      "x": 310,
+      "x2": 594,
+      "y": 393.30758587196163,
+      "y2": 390.1472805284501,
+      "height": 20.532108778305144
+    },
+    {
+      "from": "generation:onward",
+      "to": "care:march",
+      "flow": 900,
+      "offset": 0,
+      "x": 310,
+      "x2": 594,
+      "y": 367.1758110632096,
+      "y2": 68.9827313920988,
+      "height": 5.599666030446826
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:backup",
+      "flow": 10300,
+      "offset": 5,
+      "x": 14,
+      "x2": 298,
+      "y": 3.031109255724705,
+      "y2": 6.191414599236156,
+      "height": 64.08506679289181
+    },
+    {
+      "from": "generation:backup",
+      "to": "care:march",
+      "flow": 9100,
+      "offset": 0,
+      "x": 310,
+      "x2": 594,
+      "y": 6.191414599236156,
+      "y2": 3.031109255724705,
+      "height": 56.61884541896266
+    },
+    {
+      "from": "care:march",
+      "to": "product:puck",
+      "flow": 2100,
+      "offset": 9405,
+      "x": 606,
+      "x2": 890,
+      "y": 61.516510018169654,
+      "y2": 81.52519322406265,
+      "height": 13.065887404376
+    },
+    {
+      "from": "generation:backup",
+      "to": "care:occasional",
+      "flow": 1200,
+      "offset": 9100,
+      "x": 310,
+      "x2": 594,
+      "y": 62.81026001819881,
+      "y2": 303.6635496137709,
+      "height": 7.466221373929152
+    },
+    {
+      "from": "care:occasional",
+      "to": "product:photo",
+      "flow": 1200,
+      "offset": 12000,
+      "x": 606,
+      "x2": 890,
+      "y": 378.3257633530623,
+      "y2": 220.91292938605622,
+      "height": 7.466221373929159
+    },
+    {
+      "from": "src:flour",
+      "to": "generation:forgotten",
+      "flow": 5,
+      "offset": 0,
+      "x": 14,
+      "x2": 298,
+      "y": 3,
+      "y2": 3,
+      "height": 0.0311092557247048
+    },
+    {
+      "from": "generation:forgotten",
+      "to": "care:march",
+      "flow": 5,
+      "offset": 0,
+      "x": 310,
+      "x2": 594,
+      "y": 3,
+      "y2": 3,
+      "height": 0.0311092557247048
+    }
+  ]
+}

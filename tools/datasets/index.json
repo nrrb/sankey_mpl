@@ -1,0 +1,10 @@
+{
+  "_comment": [
+    "The dataset list, in fixed order. The generator reads this rather than",
+    "globbing the directory so that ordering is deterministic, which matters",
+    "because pytest parametrisation ids come from it.",
+    "",
+    "Each entry is the basename of a spec file in this directory."
+  ],
+  "datasets": ["breakroom", "catday", "groupchat", "itwasdns", "sourdough"]
+}

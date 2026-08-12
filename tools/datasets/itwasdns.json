@@ -1,0 +1,91 @@
+{
+  "_comment": [
+    "It Was DNS — 2,400,000 alerts and their journey to a root cause.",
+    "",
+    "The stress case. Strongly convergent: wide at the severity end, collapsing",
+    "onto five root causes and four resolutions, so the last columns hold a few",
+    "enormous nodes each carrying a dozen or more incoming ribbons. That is what",
+    "makes this the hardest exercise of link stacking, which orders a node's",
+    "ribbons by the vertical centre of the band at the far end — a quantity that",
+    "only becomes interesting when many ribbons share one node.",
+    "",
+    "What the shape exercises:",
+    "  - convergence rather than fan-out, so link stacking sorts long lists;",
+    "  - six orders of magnitude, from 1,510,000 down to a single cosmic-ray",
+    "    alert, which puts a large fraction of nodes under the drop threshold and",
+    "    forces the collision pass to work in the crowded middle;",
+    "  - sub-pixel ribbon heights, which the geometry stage must carry as floats",
+    "    rather than rounding away.",
+    "",
+    "Flows are alerts and conserve to 2,400,000 exactly.",
+    "",
+    "Regenerate the derived files with: node tools/generate_golden.mjs"
+  ],
+  "key": "itwasdns",
+  "title": "It Was DNS",
+  "blurb": "Strongly convergent, six orders of magnitude. 2.4 million alerts funnelled down to what was actually wrong.",
+  "orderSensitive": false,
+  "unit": "",
+  "source": "alerts",
+  "layers": ["src", "severity", "response", "hypothesis", "cause", "resolution"],
+  "rows": [
+    { "path": ["informational", "autoclosed", "network", "fine", "wontfix"], "flow": 1510000 },
+    { "path": ["informational", "autoclosed", "deploy", "fine", "wontfix"], "flow": 402000 },
+    { "path": ["informational", "queue", "network", "fine", "wontfix"], "flow": 178000 },
+    { "path": ["low", "autoclosed", "network", "fine", "wontfix"], "flow": 121000 },
+    { "path": ["low", "queue", "network", "dns", "restarted"], "flow": 63000 },
+    { "path": ["low", "queue", "deploy", "disk", "restarted"], "flow": 41500 },
+    { "path": ["low", "tuesday", "intern", "printer", "wontfix"], "flow": 22400 },
+    { "path": ["quoted", "queue", "deploy", "dns", "restarted"], "flow": 31000 },
+    { "path": ["quoted", "paged", "network", "dns", "restarted"], "flow": 14600 },
+    { "path": ["quoted", "tuesday", "intern", "printer", "postmortem"], "flow": 6900 },
+    { "path": ["quoted", "queue", "network", "cert", "restarted"], "flow": 4300 },
+    { "path": ["quoted", "queue", "cosmic", "dns", "stillopen"], "flow": 47 },
+    { "path": ["real", "paged", "network", "dns", "postmortem"], "flow": 2850 },
+    { "path": ["real", "paged", "deploy", "disk", "restarted"], "flow": 1240 },
+    { "path": ["real", "paged", "network", "cert", "postmortem"], "flow": 610 },
+    { "path": ["real", "tuesday", "intern", "printer", "stillopen"], "flow": 275 },
+    { "path": ["real", "queue", "deploy", "disk", "postmortem"], "flow": 277 },
+    { "path": ["real", "paged", "cosmic", "fine", "wontfix"], "flow": 1 }
+  ],
+  "names": {
+    "src:alerts": "Alerts",
+    "severity:informational": "Informational",
+    "severity:low": "Low",
+    "severity:quoted": "\"Critical\"",
+    "severity:real": "Actually critical",
+    "response:autoclosed": "Auto-closed by a rule",
+    "response:queue": "Sat in the queue",
+    "response:paged": "Woke somebody at 3am",
+    "response:tuesday": "Noticed on Tuesday",
+    "hypothesis:network": "\"It's the network\"",
+    "hypothesis:deploy": "\"It's the deploy\"",
+    "hypothesis:intern": "\"It's the intern\"",
+    "hypothesis:cosmic": "\"Cosmic rays\"",
+    "cause:dns": "It was DNS",
+    "cause:disk": "A disk was full",
+    "cause:printer": "It was the printer",
+    "cause:cert": "Somebody's cert expired",
+    "cause:fine": "Nothing. It was fine.",
+    "resolution:restarted": "Restarted it",
+    "resolution:wontfix": "Closed as won't fix",
+    "resolution:postmortem": "Postmortem nobody read",
+    "resolution:stillopen": "Still open"
+  },
+  "colors": {
+    "default": "#8A94A0",
+    "colorBy": "cause",
+    "layers": {
+      "resolution": "#5C6672"
+    }
+  },
+  "render": {
+    "cssWidth": 1400,
+    "cssHeight": 460,
+    "devicePixelRatio": 3
+  },
+  "preview": {
+    "width": 1640,
+    "height": 480
+  }
+}

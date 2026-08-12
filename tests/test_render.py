@@ -79,8 +79,20 @@ def test_outside_mode_puts_early_columns_on_the_right(nodes, links, wide_enough)
     assert {label["side"] for label in result.labels} == {"left", "right"}
 
 
+# Comfortably above the natural label spacing of every dataset, so each one has
+# collisions for separation to resolve. Raising the line height rather than
+# shrinking the figure is deliberate: it manufactures crowding without touching
+# geometry, so the test cannot start failing for the unrelated reason that a
+# shorter figure tripped the gap or padding guard.
+CROWDING_LINE_HEIGHT = 36.0
+
+
 def test_collision_separation_enforces_the_line_height(nodes, links, wide_enough):
-    config = {**wide_enough, "min_label_height_px": 0}
+    config = {
+        **wide_enough,
+        "min_label_height_px": 0,
+        "label_line_height_px": CROWDING_LINE_HEIGHT,
+    }
     crowded = render_sankey(nodes, links, {**config, "label_collision_separation": False})
     spaced = render_sankey(nodes, links, {**config, "label_collision_separation": True})
 
@@ -96,14 +108,20 @@ def test_collision_separation_enforces_the_line_height(nodes, links, wide_enough
                 worst = min(worst, b - a)
         return worst
 
-    assert smallest_gap(crowded) < 14.4
-    assert smallest_gap(spaced) == pytest.approx(14.4, abs=1e-6)
+    assert smallest_gap(crowded) < CROWDING_LINE_HEIGHT
+    assert smallest_gap(spaced) == pytest.approx(CROWDING_LINE_HEIGHT, abs=1e-6)
 
 
 def test_separation_preserves_label_order(nodes, links, wide_enough):
     """Within a column. Separation is per-column, so it can and does reorder
     labels relative to labels in *other* columns — that is not a violation."""
-    config = {**wide_enough, "min_label_height_px": 0}
+    config = {
+        **wide_enough,
+        "min_label_height_px": 0,
+        # Same crowding as the test above, so separation has real work to do here
+        # rather than trivially preserving an order it never had to disturb.
+        "label_line_height_px": CROWDING_LINE_HEIGHT,
+    }
     before = render_sankey(nodes, links, {**config, "label_collision_separation": False})
     after = render_sankey(nodes, links, {**config, "label_collision_separation": True})
 
@@ -172,7 +190,16 @@ def test_ribbons_are_inset_from_their_nodes(nodes, links, wide_enough):
 
 
 def test_uncoloured_nodes_still_render(links, tmp_path):
-    result = render_sankey({}, links, {"label_gutter_px": 60})
+    """With no node specs at all, keys stand in as labels.
+
+    The gutter is measured from the widest first-column key rather than fixed,
+    for the same reason ``wide_enough`` measures rather than hardcodes: a constant
+    here silently encodes how long one dataset's source key happens to be, and
+    fails on the next dataset for a reason that has nothing to do with colour.
+    """
+    keys = {link["from"] for link in links} | {link["to"] for link in links}
+    widest = max((k for k in keys if k.startswith("src:")), key=len)
+    result = render_sankey({}, links, {"label_gutter_px": text_width(widest) + 20})
     path = tmp_path / "plain.svg"
     save(result, str(path))
     assert path.exists()
@@ -209,12 +236,27 @@ def test_link_order_decides_ties(wide_enough):
     assert backward.nodes["b"].y < backward.nodes["a"].y
 
 
-def test_distinct_flows_are_insensitive_to_link_order(nodes, links, wide_enough):
-    """The flip side: with no ties to break, order does not matter.
+def test_link_order_matters_exactly_where_the_chain_ties(
+    nodes, links, wide_enough, order_sensitive
+):
+    """The flip side, pinned in both directions across all five datasets.
 
-    Worth pinning, because it is the case real data usually falls into and it
-    means a reordered query result does not silently redraw the diagram.
+    Reversing the link list is expected to change the diagram only for a dataset
+    whose tie-break chain actually runs out of criteria. Which datasets those are
+    is recorded per dataset rather than guessed, because the intuitive rule is
+    wrong: it is *not* the ones with equal sibling flows. See ``order_sensitive``
+    in conftest for why the two come apart.
+
+    Asserting the insensitive case matters because it is what real data usually
+    falls into — a reordered query result must not silently redraw the diagram.
+    Asserting the sensitive case matters because it is what stops the tie-break
+    chain being collapsed into a single sort key.
     """
     a = render_sankey(nodes, links, wide_enough).as_dict()
     b = render_sankey(nodes, list(reversed(links)), wide_enough).as_dict()
-    assert a["nodes"] == b["nodes"]
+    if order_sensitive:
+        assert a["nodes"] != b["nodes"], (
+            "declared order-sensitive, but reversing the links changed nothing"
+        )
+    else:
+        assert a["nodes"] == b["nodes"]

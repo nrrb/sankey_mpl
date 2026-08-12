@@ -1,0 +1,708 @@
+{
+  "generatedBy": "tools/generate_golden.mjs",
+  "key": "breakroom",
+  "title": "Break Room Forensics",
+  "upstream": {
+    "library": "chartjs-chart-sankey",
+    "version": "0.15.0",
+    "chartjs": "4.5.1"
+  },
+  "render": {
+    "cssWidth": 1400,
+    "cssHeight": 460,
+    "devicePixelRatio": 3,
+    "backingStoreHeight": 1380,
+    "nodeWidth": 10,
+    "nodePadding": 10,
+    "borderWidth": 1,
+    "padding": {
+      "top": 3,
+      "right": 13,
+      "bottom": 3,
+      "left": 3
+    }
+  },
+  "maxColumn": 5,
+  "totalHeight": 497391.3043478261,
+  "chartArea": {
+    "left": 3,
+    "right": 1387,
+    "top": 3,
+    "bottom": 457
+  },
+  "nodes": {
+    "src:fridge": {
+      "column": 0,
+      "y": 0,
+      "size": 480000,
+      "inflow": 0,
+      "outflow": 480000
+    },
+    "container:lunchbag": {
+      "column": 1,
+      "y": 73009.52173913043,
+      "size": 162800,
+      "inflow": 162800,
+      "outflow": 162800
+    },
+    "owner:labeled": {
+      "column": 2,
+      "y": 134559.52173913043,
+      "size": 261697,
+      "inflow": 261697,
+      "outflow": 261697
+    },
+    "age:sameday": {
+      "column": 3,
+      "y": 99206.52173913043,
+      "size": 172347,
+      "inflow": 172347,
+      "outflow": 172347
+    },
+    "action:eaten_owner": {
+      "column": 4,
+      "y": 132956.52173913043,
+      "size": 225197,
+      "inflow": 225197,
+      "outflow": 225197
+    },
+    "fate:digested": {
+      "column": 5,
+      "y": 120856.52173913043,
+      "size": 335497,
+      "inflow": 335497,
+      "outflow": 0
+    },
+    "age:week": {
+      "column": 3,
+      "y": 275031.7826086957,
+      "size": 163150,
+      "inflow": 163150,
+      "outflow": 163150
+    },
+    "owner:note": {
+      "column": 2,
+      "y": 403213.04347826086,
+      "size": 51000,
+      "inflow": 51000,
+      "outflow": 51000
+    },
+    "action:eaten_other": {
+      "column": 4,
+      "y": 383613.04347826086,
+      "size": 110300,
+      "inflow": 110300,
+      "outflow": 110300
+    },
+    "owner:unclaimed": {
+      "column": 2,
+      "y": 0,
+      "size": 127603,
+      "inflow": 127603,
+      "outflow": 127603
+    },
+    "age:quarter": {
+      "column": 3,
+      "y": 0,
+      "size": 92250,
+      "inflow": 92250,
+      "outflow": 92250
+    },
+    "action:purged": {
+      "column": 4,
+      "y": 0,
+      "size": 126000,
+      "inflow": 126000,
+      "outflow": 126000
+    },
+    "fate:biohazard": {
+      "column": 5,
+      "y": 0,
+      "size": 113900,
+      "inflow": 113900,
+      "outflow": 0
+    },
+    "container:tupperware": {
+      "column": 1,
+      "y": 239287.78260869565,
+      "size": 144250,
+      "inflow": 144250,
+      "outflow": 144250
+    },
+    "owner:threat": {
+      "column": 2,
+      "y": 457691.3043478261,
+      "size": 39700,
+      "inflow": 39700,
+      "outflow": 39700
+    },
+    "age:geologic": {
+      "column": 3,
+      "y": 441660.04347826086,
+      "size": 52253,
+      "inflow": 52253,
+      "outflow": 52253
+    },
+    "container:foil": {
+      "column": 1,
+      "y": 387016.04347826086,
+      "size": 70347,
+      "inflow": 70347,
+      "outflow": 70347
+    },
+    "action:sentient": {
+      "column": 4,
+      "y": 361631.7826086957,
+      "size": 18503,
+      "inflow": 18503,
+      "outflow": 18503
+    },
+    "container:jar": {
+      "column": 1,
+      "y": 460841.3043478261,
+      "size": 36550,
+      "inflow": 36550,
+      "outflow": 36550
+    },
+    "fate:still_there": {
+      "column": 5,
+      "y": 466788.3043478261,
+      "size": 30603,
+      "inflow": 30603,
+      "outflow": 0
+    },
+    "container:cake": {
+      "column": 1,
+      "y": 3481.2608695652175,
+      "size": 66050,
+      "inflow": 66050,
+      "outflow": 66050
+    },
+    "container:mayo": {
+      "column": 1,
+      "y": 0,
+      "size": 3,
+      "inflow": 3,
+      "outflow": 3
+    }
+  },
+  "links": [
+    {
+      "from": "src:fridge",
+      "to": "container:lunchbag",
+      "flow": 162800,
+      "offset": 66053,
+      "x": 14,
+      "x2": 278.8,
+      "y": 63.29068409090908,
+      "y2": 69.64033444055943,
+      "height": 148.5976923076923
+    },
+    {
+      "from": "container:lunchbag",
+      "to": "owner:labeled",
+      "flow": 137000,
+      "offset": 7300,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 76.30349877622378,
+      "y2": 173.28448653846152,
+      "height": 125.04842657342657
+    },
+    {
+      "from": "owner:labeled",
+      "to": "age:sameday",
+      "flow": 156847,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 125.82085017482515,
+      "y2": 93.55196678321677,
+      "height": 143.16401870629372
+    },
+    {
+      "from": "age:sameday",
+      "to": "action:eaten_owner",
+      "flow": 120347,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 93.55196678321677,
+      "y2": 124.3576923076923,
+      "height": 109.84819702797203
+    },
+    {
+      "from": "action:eaten_owner",
+      "to": "fate:digested",
+      "flow": 225197,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 124.3576923076923,
+      "y2": 113.31326923076922,
+      "height": 205.55131765734265
+    },
+    {
+      "from": "owner:labeled",
+      "to": "age:week",
+      "flow": 104850,
+      "offset": 156847,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 268.98486888111887,
+      "y2": 264.44411486013985,
+      "height": 95.70312062937063
+    },
+    {
+      "from": "age:week",
+      "to": "action:eaten_owner",
+      "flow": 104850,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 254.03862534965035,
+      "y2": 234.20588933566432,
+      "height": 95.70312062937066
+    },
+    {
+      "from": "container:lunchbag",
+      "to": "owner:note",
+      "flow": 18500,
+      "offset": 144300,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 201.35192534965034,
+      "y2": 371.0376398601398,
+      "height": 16.886101398601397
+    },
+    {
+      "from": "owner:note",
+      "to": "age:week",
+      "flow": 46900,
+      "offset": 4100,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 374.779965034965,
+      "y2": 360.1472354895105,
+      "height": 42.80854895104892
+    },
+    {
+      "from": "age:week",
+      "to": "action:eaten_other",
+      "flow": 58300,
+      "offset": 104850,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 349.741745979021,
+      "y2": 400.6111363636363,
+      "height": 53.21403846153845
+    },
+    {
+      "from": "action:eaten_other",
+      "to": "fate:digested",
+      "flow": 110300,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 353.1475,
+      "y2": 318.86458688811183,
+      "height": 100.67767482517479
+    },
+    {
+      "from": "container:lunchbag",
+      "to": "owner:unclaimed",
+      "flow": 7300,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 69.64033444055943,
+      "y2": 15.827047727272726,
+      "height": 6.663164335664348
+    },
+    {
+      "from": "owner:unclaimed",
+      "to": "age:quarter",
+      "flow": 84950,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 3,
+      "y2": 3,
+      "height": 77.53915209790209
+    },
+    {
+      "from": "age:quarter",
+      "to": "action:purged",
+      "flow": 92250,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 3,
+      "y2": 3,
+      "height": 84.20231643356642
+    },
+    {
+      "from": "action:purged",
+      "to": "fate:biohazard",
+      "flow": 105000,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 3,
+      "y2": 3,
+      "height": 95.84003496503496
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:tupperware",
+      "flow": 144250,
+      "offset": 228853,
+      "x": 14,
+      "x2": 278.8,
+      "y": 211.8883763986014,
+      "y2": 221.41285192307691,
+      "height": 131.66595279720275
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:labeled",
+      "flow": 62000,
+      "offset": 43750,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 261.34619982517484,
+      "y2": 298.33291311188805,
+      "height": 56.59125874125874
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:note",
+      "flow": 23000,
+      "offset": 105750,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 317.9374585664336,
+      "y2": 387.92374125874125,
+      "height": 20.9935314685315
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:threat",
+      "flow": 15500,
+      "offset": 128750,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 338.9309900349651,
+      "y2": 420.76333916083917,
+      "height": 14.147814685314643
+    },
+    {
+      "from": "owner:threat",
+      "to": "age:sameday",
+      "flow": 15500,
+      "offset": 3200,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 423.6841783216783,
+      "y2": 236.71598548951044,
+      "height": 14.1478146853147
+    },
+    {
+      "from": "container:tupperware",
+      "to": "owner:unclaimed",
+      "flow": 43750,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 221.41285192307691,
+      "y2": 22.49021206293706,
+      "height": 39.93334790209792
+    },
+    {
+      "from": "owner:unclaimed",
+      "to": "age:geologic",
+      "flow": 31253,
+      "offset": 96350,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 90.9446416083916,
+      "y2": 406.13060961538457,
+      "height": 28.526558216783215
+    },
+    {
+      "from": "age:geologic",
+      "to": "action:purged",
+      "flow": 33750,
+      "offset": 0,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 406.13060961538457,
+      "y2": 87.20231643356642,
+      "height": 30.80572552447552
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:foil",
+      "flow": 70347,
+      "offset": 373103,
+      "x": 14,
+      "x2": 278.8,
+      "y": 343.55432919580414,
+      "y2": 356.2536298951049,
+      "height": 64.21008513986021
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:unclaimed",
+      "flow": 52900,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 356.2536298951049,
+      "y2": 62.42355996503497,
+      "height": 48.28512237762237
+    },
+    {
+      "from": "age:geologic",
+      "to": "action:sentient",
+      "flow": 18503,
+      "offset": 33750,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 436.9363351398601,
+      "y2": 333.0838351398601,
+      "height": 16.88883968531468
+    },
+    {
+      "from": "action:sentient",
+      "to": "fate:biohazard",
+      "flow": 8900,
+      "offset": 0,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 333.0838351398601,
+      "y2": 98.84003496503496,
+      "height": 8.12358391608393
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:note",
+      "flow": 5400,
+      "offset": 61747,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 412.6139597902098,
+      "y2": 408.9172727272727,
+      "height": 4.928916083916079
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:threat",
+      "flow": 3200,
+      "offset": 67147,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 417.54287587412585,
+      "y2": 434.91115384615387,
+      "height": 2.9208391608391366
+    },
+    {
+      "from": "owner:threat",
+      "to": "age:quarter",
+      "flow": 3200,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 420.76333916083917,
+      "y2": 84.28147727272726,
+      "height": 2.9208391608391366
+    },
+    {
+      "from": "container:foil",
+      "to": "owner:labeled",
+      "flow": 8847,
+      "offset": 52900,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 404.53875227272727,
+      "y2": 354.92417185314685,
+      "height": 8.07520751748251
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:jar",
+      "flow": 36550,
+      "offset": 443450,
+      "x": 14,
+      "x2": 278.8,
+      "y": 407.76441433566436,
+      "y2": 423.6385402097902,
+      "height": 33.36145979020978
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:threat",
+      "flow": 21000,
+      "offset": 15550,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 437.831993006993,
+      "y2": 437.831993006993,
+      "height": 19.168006993006998
+    },
+    {
+      "from": "owner:threat",
+      "to": "age:geologic",
+      "flow": 21000,
+      "offset": 18700,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 437.831993006993,
+      "y2": 434.65716783216783,
+      "height": 19.168006993006998
+    },
+    {
+      "from": "action:purged",
+      "to": "fate:still_there",
+      "flow": 21000,
+      "offset": 105000,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 98.84003496503496,
+      "y2": 429.06673723776225,
+      "height": 19.168006993006983
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:unclaimed",
+      "flow": 9600,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 423.6385402097902,
+      "y2": 110.70868234265734,
+      "height": 8.762517482517467
+    },
+    {
+      "from": "action:sentient",
+      "to": "fate:still_there",
+      "flow": 9603,
+      "offset": 8900,
+      "x": 1121.2,
+      "x2": 1386,
+      "y": 341.20741905594406,
+      "y2": 448.23474423076925,
+      "height": 8.765255769230748
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:note",
+      "flow": 4100,
+      "offset": 11450,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 434.08966783216783,
+      "y2": 413.8461888111888,
+      "height": 3.7423251748251687
+    },
+    {
+      "from": "owner:note",
+      "to": "age:quarter",
+      "flow": 4100,
+      "offset": 0,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 371.0376398601398,
+      "y2": 80.53915209790209,
+      "height": 3.7423251748252255
+    },
+    {
+      "from": "container:jar",
+      "to": "owner:labeled",
+      "flow": 1850,
+      "offset": 9600,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 432.4010576923077,
+      "y2": 362.99937937062936,
+      "height": 1.6886101398601454
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:cake",
+      "flow": 66050,
+      "offset": 3,
+      "x": 14,
+      "x2": 278.8,
+      "y": 3.002738286713287,
+      "y2": 6.177563461538462,
+      "height": 60.28794580419579
+    },
+    {
+      "from": "container:cake",
+      "to": "owner:labeled",
+      "flow": 52000,
+      "offset": 14050,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 19.0018729020979,
+      "y2": 125.82085017482515,
+      "height": 47.463636363636354
+    },
+    {
+      "from": "age:sameday",
+      "to": "action:eaten_other",
+      "flow": 52000,
+      "offset": 120347,
+      "x": 844.4,
+      "x2": 1109.2,
+      "y": 203.4001638111888,
+      "y2": 353.1475,
+      "height": 47.46363636363637
+    },
+    {
+      "from": "container:cake",
+      "to": "owner:unclaimed",
+      "flow": 14050,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 6.177563461538462,
+      "y2": 3.002738286713287,
+      "height": 12.824309440559439
+    },
+    {
+      "from": "owner:unclaimed",
+      "to": "age:week",
+      "flow": 11400,
+      "offset": 84950,
+      "x": 567.6,
+      "x2": 832.4,
+      "y": 80.53915209790209,
+      "y2": 254.03862534965035,
+      "height": 10.405489510489517
+    },
+    {
+      "from": "src:fridge",
+      "to": "container:mayo",
+      "flow": 3,
+      "offset": 0,
+      "x": 14,
+      "x2": 278.8,
+      "y": 3,
+      "y2": 3,
+      "height": 0.002738286713286797
+    },
+    {
+      "from": "container:mayo",
+      "to": "owner:unclaimed",
+      "flow": 3,
+      "offset": 0,
+      "x": 290.8,
+      "x2": 555.6,
+      "y": 3,
+      "y2": 3,
+      "height": 0.002738286713286797
+    }
+  ]
+}

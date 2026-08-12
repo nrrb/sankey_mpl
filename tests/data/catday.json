@@ -1,0 +1,318 @@
+{
+  "key": "catday",
+  "title": "86,400 Seconds in the Life of a Cat",
+  "nodes": {
+    "src:catday": {
+      "label": "One Cat-Day (86,400 s)",
+      "color": "#8A94A0"
+    },
+    "posture:asleep": {
+      "label": "Asleep (41,400 s)",
+      "color": "#3F9C35"
+    },
+    "place:sunbeam": {
+      "label": "In the sunbeam (31,550 s)",
+      "color": "#8A94A0"
+    },
+    "activity:nothing": {
+      "label": "Doing nothing whatsoever (46,000 s)",
+      "color": "#8A94A0"
+    },
+    "outcome:nap": {
+      "label": "Nap achieved (47,950 s)",
+      "color": "#5C6672"
+    },
+    "place:keyboard": {
+      "label": "On the laptop keyboard (17,702 s)",
+      "color": "#8A94A0"
+    },
+    "place:box": {
+      "label": "In a box that is too small (13,350 s)",
+      "color": "#8A94A0"
+    },
+    "place:lap": {
+      "label": "On a lap, briefly (10,008 s)",
+      "color": "#8A94A0"
+    },
+    "outcome:trained": {
+      "label": "Human successfully trained (19,508 s)",
+      "color": "#5C6672"
+    },
+    "posture:loaf": {
+      "label": "Loaf (23,158 s)",
+      "color": "#7A4FA3"
+    },
+    "activity:staring": {
+      "label": "Staring at a wall (17,950 s)",
+      "color": "#8A94A0"
+    },
+    "place:doorway": {
+      "label": "Exactly in the doorway (13,790 s)",
+      "color": "#8A94A0"
+    },
+    "activity:judging": {
+      "label": "Judging you (12,508 s)",
+      "color": "#8A94A0"
+    },
+    "posture:alert": {
+      "label": "High alert, no reason given (13,042 s)",
+      "color": "#E8730C"
+    },
+    "outcome:dignity": {
+      "label": "Dignity lost, recovered instantly (13,650 s)",
+      "color": "#5C6672"
+    },
+    "activity:knocking": {
+      "label": "Knocking things off shelves (3,990 s)",
+      "color": "#8A94A0"
+    },
+    "outcome:destroyed": {
+      "label": "Object destroyed (5,292 s)",
+      "color": "#5C6672"
+    },
+    "activity:reddot": {
+      "label": "Hunting the red dot (1,752 s)",
+      "color": "#8A94A0"
+    },
+    "posture:liquid": {
+      "label": "Liquid (8,800 s)",
+      "color": "#1F6FB2"
+    },
+    "activity:kneading": {
+      "label": "Kneading a human (4,200 s)",
+      "color": "#8A94A0"
+    }
+  },
+  "links": [
+    {
+      "from": "src:catday",
+      "to": "posture:asleep",
+      "flow": 41400
+    },
+    {
+      "from": "posture:asleep",
+      "to": "place:sunbeam",
+      "flow": 21600
+    },
+    {
+      "from": "place:sunbeam",
+      "to": "activity:nothing",
+      "flow": 21600
+    },
+    {
+      "from": "activity:nothing",
+      "to": "outcome:nap",
+      "flow": 37300
+    },
+    {
+      "from": "posture:asleep",
+      "to": "place:keyboard",
+      "flow": 9400
+    },
+    {
+      "from": "place:keyboard",
+      "to": "activity:nothing",
+      "flow": 9400
+    },
+    {
+      "from": "posture:asleep",
+      "to": "place:box",
+      "flow": 6300
+    },
+    {
+      "from": "place:box",
+      "to": "activity:nothing",
+      "flow": 10900
+    },
+    {
+      "from": "posture:asleep",
+      "to": "place:lap",
+      "flow": 4100
+    },
+    {
+      "from": "place:lap",
+      "to": "activity:nothing",
+      "flow": 4100
+    },
+    {
+      "from": "activity:nothing",
+      "to": "outcome:trained",
+      "flow": 4100
+    },
+    {
+      "from": "src:catday",
+      "to": "posture:loaf",
+      "flow": 23158
+    },
+    {
+      "from": "posture:loaf",
+      "to": "place:sunbeam",
+      "flow": 8200
+    },
+    {
+      "from": "place:sunbeam",
+      "to": "activity:staring",
+      "flow": 8200
+    },
+    {
+      "from": "activity:staring",
+      "to": "outcome:nap",
+      "flow": 10650
+    },
+    {
+      "from": "posture:loaf",
+      "to": "place:doorway",
+      "flow": 5600
+    },
+    {
+      "from": "place:doorway",
+      "to": "activity:judging",
+      "flow": 5600
+    },
+    {
+      "from": "activity:judging",
+      "to": "outcome:trained",
+      "flow": 12508
+    },
+    {
+      "from": "posture:loaf",
+      "to": "place:keyboard",
+      "flow": 3900
+    },
+    {
+      "from": "place:keyboard",
+      "to": "activity:judging",
+      "flow": 3900
+    },
+    {
+      "from": "posture:loaf",
+      "to": "place:box",
+      "flow": 2450
+    },
+    {
+      "from": "place:box",
+      "to": "activity:staring",
+      "flow": 2450
+    },
+    {
+      "from": "posture:loaf",
+      "to": "place:lap",
+      "flow": 3008
+    },
+    {
+      "from": "place:lap",
+      "to": "activity:judging",
+      "flow": 3008
+    },
+    {
+      "from": "src:catday",
+      "to": "posture:alert",
+      "flow": 13042
+    },
+    {
+      "from": "posture:alert",
+      "to": "place:doorway",
+      "flow": 8190
+    },
+    {
+      "from": "place:doorway",
+      "to": "activity:staring",
+      "flow": 7300
+    },
+    {
+      "from": "activity:staring",
+      "to": "outcome:dignity",
+      "flow": 7300
+    },
+    {
+      "from": "posture:alert",
+      "to": "place:keyboard",
+      "flow": 3102
+    },
+    {
+      "from": "place:keyboard",
+      "to": "activity:knocking",
+      "flow": 3100
+    },
+    {
+      "from": "activity:knocking",
+      "to": "outcome:destroyed",
+      "flow": 3990
+    },
+    {
+      "from": "posture:alert",
+      "to": "place:sunbeam",
+      "flow": 1750
+    },
+    {
+      "from": "place:sunbeam",
+      "to": "activity:reddot",
+      "flow": 1750
+    },
+    {
+      "from": "activity:reddot",
+      "to": "outcome:dignity",
+      "flow": 1750
+    },
+    {
+      "from": "place:doorway",
+      "to": "activity:knocking",
+      "flow": 890
+    },
+    {
+      "from": "place:keyboard",
+      "to": "activity:reddot",
+      "flow": 2
+    },
+    {
+      "from": "activity:reddot",
+      "to": "outcome:destroyed",
+      "flow": 2
+    },
+    {
+      "from": "src:catday",
+      "to": "posture:liquid",
+      "flow": 8800
+    },
+    {
+      "from": "posture:liquid",
+      "to": "place:box",
+      "flow": 4600
+    },
+    {
+      "from": "activity:nothing",
+      "to": "outcome:dignity",
+      "flow": 4600
+    },
+    {
+      "from": "posture:liquid",
+      "to": "place:lap",
+      "flow": 2900
+    },
+    {
+      "from": "place:lap",
+      "to": "activity:kneading",
+      "flow": 2900
+    },
+    {
+      "from": "activity:kneading",
+      "to": "outcome:trained",
+      "flow": 2900
+    },
+    {
+      "from": "posture:liquid",
+      "to": "place:keyboard",
+      "flow": 1300
+    },
+    {
+      "from": "place:keyboard",
+      "to": "activity:kneading",
+      "flow": 1300
+    },
+    {
+      "from": "activity:kneading",
+      "to": "outcome:destroyed",
+      "flow": 1300
+    }
+  ]
+}

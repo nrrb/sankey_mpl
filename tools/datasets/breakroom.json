@@ -1,0 +1,101 @@
+{
+  "_comment": [
+    "Break Room Forensics — an audit of the office refrigerator.",
+    "",
+    "Synthetic in the sense that matters: the subject is a joke, but every number",
+    "was chosen for a code path rather than to resemble a real audit. Six columns",
+    "and heavy sharing between them make this the widest and densest of the five.",
+    "",
+    "What the shape exercises:",
+    "  - six columns, so the gap carry-over compounds across five column",
+    "    boundaries rather than the two a four-column fixture reaches;",
+    "  - every middle node fed by four to six upstream nodes, so the per-column",
+    "    overlap sweep does real work in every single column;",
+    "  - many rows collapsing onto the same adjacent pair, so link merging is",
+    "    exercised throughout rather than in one place;",
+    "  - the communal mayonnaise at 3g against a 96,000g lunch bag — five orders",
+    "    of magnitude, so several nodes fall under the label drop threshold.",
+    "",
+    "Flows are grams and conserve to 480,000 exactly.",
+    "",
+    "Regenerate the derived files with: node tools/generate_golden.mjs"
+  ],
+  "key": "breakroom",
+  "title": "Break Room Forensics",
+  "blurb": "Six columns of dense sharing. An audit of the office refrigerator, conducted under protest.",
+  "orderSensitive": false,
+  "unit": " g",
+  "source": "fridge",
+  "layers": ["src", "container", "owner", "age", "action", "fate"],
+  "rows": [
+    { "path": ["lunchbag", "labeled", "sameday", "eaten_owner", "digested"], "flow": 96000 },
+    { "path": ["lunchbag", "labeled", "week", "eaten_owner", "digested"], "flow": 41000 },
+    { "path": ["lunchbag", "note", "week", "eaten_other", "digested"], "flow": 18500 },
+    { "path": ["lunchbag", "unclaimed", "quarter", "purged", "biohazard"], "flow": 7300 },
+    { "path": ["tupperware", "labeled", "week", "eaten_owner", "digested"], "flow": 62000 },
+    { "path": ["tupperware", "note", "week", "eaten_other", "digested"], "flow": 23000 },
+    { "path": ["tupperware", "threat", "sameday", "eaten_owner", "digested"], "flow": 15500 },
+    { "path": ["tupperware", "unclaimed", "quarter", "purged", "biohazard"], "flow": 31000 },
+    { "path": ["tupperware", "unclaimed", "geologic", "purged", "biohazard"], "flow": 12750 },
+    { "path": ["foil", "unclaimed", "quarter", "purged", "biohazard"], "flow": 44000 },
+    { "path": ["foil", "unclaimed", "geologic", "sentient", "biohazard"], "flow": 8900 },
+    { "path": ["foil", "note", "week", "eaten_other", "digested"], "flow": 5400 },
+    { "path": ["foil", "threat", "quarter", "purged", "biohazard"], "flow": 3200 },
+    { "path": ["foil", "labeled", "sameday", "eaten_owner", "digested"], "flow": 8847 },
+    { "path": ["jar", "threat", "geologic", "purged", "still_there"], "flow": 21000 },
+    { "path": ["jar", "unclaimed", "geologic", "sentient", "still_there"], "flow": 9600 },
+    { "path": ["jar", "note", "quarter", "purged", "biohazard"], "flow": 4100 },
+    { "path": ["jar", "labeled", "week", "eaten_owner", "digested"], "flow": 1850 },
+    { "path": ["cake", "labeled", "sameday", "eaten_other", "digested"], "flow": 52000 },
+    { "path": ["cake", "unclaimed", "week", "eaten_other", "digested"], "flow": 11400 },
+    { "path": ["cake", "unclaimed", "quarter", "purged", "biohazard"], "flow": 2650 },
+    { "path": ["mayo", "unclaimed", "geologic", "sentient", "still_there"], "flow": 3 }
+  ],
+  "names": {
+    "src:fridge": "The Fridge",
+    "container:lunchbag": "Someone's lunch bag",
+    "container:tupperware": "Unlabelled Tupperware",
+    "container:foil": "A shape wrapped in foil",
+    "container:jar": "Jar of indeterminate purpose",
+    "container:cake": "Leftover birthday cake",
+    "container:mayo": "The communal mayonnaise, vintage unknown",
+    "owner:labeled": "Name written on it",
+    "owner:note": "Passive-aggressive note attached",
+    "owner:threat": "\"DO NOT TOUCH — I MEAN IT\"",
+    "owner:unclaimed": "Claimed by nobody, ever",
+    "age:sameday": "Gone the same day",
+    "age:week": "Lasted a week",
+    "age:quarter": "Survived a full quarter",
+    "age:geologic": "Geologic timescale",
+    "action:eaten_owner": "Eaten by its rightful owner",
+    "action:eaten_other": "Eaten by someone else entirely",
+    "action:purged": "Removed in the great fridge purge",
+    "action:sentient": "Achieved sentience",
+    "fate:digested": "Digested",
+    "fate:biohazard": "Biohazard bin",
+    "fate:still_there": "Still in there right now"
+  },
+  "colors": {
+    "default": "#8A94A0",
+    "colorBy": "container",
+    "layers": {
+      "fate": "#5C6672"
+    }
+  },
+  "render": {
+    "cssWidth": 1400,
+    "cssHeight": 460,
+    "devicePixelRatio": 3
+  },
+  "preview": {
+    "_comment": [
+      "Size for the README gallery image only, kept separate from `render` above.",
+      "`render` is what the golden was produced at and is a test concern; changing",
+      "it moves geometry. This is a purely cosmetic knob. Six columns of long",
+      "labels need more pitch than the golden's width gives, or labels in adjacent",
+      "columns overlap — legal (separation is per-column) but ugly in a hero image."
+    ],
+    "width": 1760,
+    "height": 480
+  }
+}

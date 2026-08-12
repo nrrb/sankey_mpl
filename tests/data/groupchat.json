@@ -1,0 +1,264 @@
+{
+  "key": "groupchat",
+  "title": "The Group Chat Decides Where to Get Brunch",
+  "nodes": {
+    "src:messages": {
+      "label": "Messages (12,000)",
+      "color": "#8A94A0"
+    },
+    "topic:brunch": {
+      "label": "Brunch somewhere new (2,604)",
+      "color": "#3F9C35"
+    },
+    "phase:brunch_burst": {
+      "label": "Nine emoji in four seconds (2,600)",
+      "color": "#8A94A0"
+    },
+    "signal:brunch_logistics": {
+      "label": "The logistics quagmire (2,600)",
+      "color": "#8A94A0"
+    },
+    "outcome:brunch_cancelled": {
+      "label": "Cancelled 20 minutes before (2,600)",
+      "color": "#5C6672"
+    },
+    "phase:brunch_trying": {
+      "label": "One person still trying (4)",
+      "color": "#8A94A0"
+    },
+    "signal:brunch_lastone": {
+      "label": "A direct message, out of desperation (4)",
+      "color": "#8A94A0"
+    },
+    "outcome:brunch_happened": {
+      "label": "It actually happened (4)",
+      "color": "#5C6672"
+    },
+    "topic:hike": {
+      "label": "A hike nobody wants (2,170)",
+      "color": "#7A4FA3"
+    },
+    "phase:hike_burst": {
+      "label": "Enthusiasm, initially (1,850)",
+      "color": "#8A94A0"
+    },
+    "signal:hike_silence": {
+      "label": "The long silence (1,850)",
+      "color": "#8A94A0"
+    },
+    "outcome:hike_ghosted": {
+      "label": "Ghosted entirely (1,850)",
+      "color": "#5C6672"
+    },
+    "phase:hike_trying": {
+      "label": "One person posting trail maps (320)",
+      "color": "#8A94A0"
+    },
+    "signal:hike_lastone": {
+      "label": "\"Next weekend?\" (320)",
+      "color": "#8A94A0"
+    },
+    "outcome:hike_rescheduled": {
+      "label": "Rescheduled into the void (320)",
+      "color": "#5C6672"
+    },
+    "topic:birthday": {
+      "label": "Someone's birthday (3,840)",
+      "color": "#E8730C"
+    },
+    "phase:bday_burst": {
+      "label": "Genuine excitement (3,100)",
+      "color": "#8A94A0"
+    },
+    "signal:bday_logistics": {
+      "label": "A spreadsheet appears (3,100)",
+      "color": "#8A94A0"
+    },
+    "outcome:bday_happened": {
+      "label": "Happened, under duress (3,100)",
+      "color": "#5C6672"
+    },
+    "phase:bday_silence": {
+      "label": "Nobody volunteers to organise (740)",
+      "color": "#8A94A0"
+    },
+    "signal:bday_nobody": {
+      "label": "Read by eleven, answered by none (740)",
+      "color": "#8A94A0"
+    },
+    "outcome:bday_cancelled": {
+      "label": "Quietly cancelled (740)",
+      "color": "#5C6672"
+    },
+    "topic:something": {
+      "label": "\"We should do something\" (3,386)",
+      "color": "#1F6FB2"
+    },
+    "phase:some_burst": {
+      "label": "Everyone agrees in principle (2,900)",
+      "color": "#8A94A0"
+    },
+    "signal:some_silence": {
+      "label": "Three weeks of nothing (2,900)",
+      "color": "#8A94A0"
+    },
+    "outcome:some_ghosted": {
+      "label": "Ghosted entirely, again (2,900)",
+      "color": "#5C6672"
+    },
+    "phase:some_trying": {
+      "label": "A poll nobody answers (486)",
+      "color": "#8A94A0"
+    },
+    "signal:some_nobody": {
+      "label": "Someone reacts with a thumbs up (486)",
+      "color": "#8A94A0"
+    },
+    "outcome:some_void": {
+      "label": "Still theoretically happening (486)",
+      "color": "#5C6672"
+    }
+  },
+  "links": [
+    {
+      "from": "src:messages",
+      "to": "topic:brunch",
+      "flow": 2604
+    },
+    {
+      "from": "topic:brunch",
+      "to": "phase:brunch_burst",
+      "flow": 2600
+    },
+    {
+      "from": "phase:brunch_burst",
+      "to": "signal:brunch_logistics",
+      "flow": 2600
+    },
+    {
+      "from": "signal:brunch_logistics",
+      "to": "outcome:brunch_cancelled",
+      "flow": 2600
+    },
+    {
+      "from": "topic:brunch",
+      "to": "phase:brunch_trying",
+      "flow": 4
+    },
+    {
+      "from": "phase:brunch_trying",
+      "to": "signal:brunch_lastone",
+      "flow": 4
+    },
+    {
+      "from": "signal:brunch_lastone",
+      "to": "outcome:brunch_happened",
+      "flow": 4
+    },
+    {
+      "from": "src:messages",
+      "to": "topic:hike",
+      "flow": 2170
+    },
+    {
+      "from": "topic:hike",
+      "to": "phase:hike_burst",
+      "flow": 1850
+    },
+    {
+      "from": "phase:hike_burst",
+      "to": "signal:hike_silence",
+      "flow": 1850
+    },
+    {
+      "from": "signal:hike_silence",
+      "to": "outcome:hike_ghosted",
+      "flow": 1850
+    },
+    {
+      "from": "topic:hike",
+      "to": "phase:hike_trying",
+      "flow": 320
+    },
+    {
+      "from": "phase:hike_trying",
+      "to": "signal:hike_lastone",
+      "flow": 320
+    },
+    {
+      "from": "signal:hike_lastone",
+      "to": "outcome:hike_rescheduled",
+      "flow": 320
+    },
+    {
+      "from": "src:messages",
+      "to": "topic:birthday",
+      "flow": 3840
+    },
+    {
+      "from": "topic:birthday",
+      "to": "phase:bday_burst",
+      "flow": 3100
+    },
+    {
+      "from": "phase:bday_burst",
+      "to": "signal:bday_logistics",
+      "flow": 3100
+    },
+    {
+      "from": "signal:bday_logistics",
+      "to": "outcome:bday_happened",
+      "flow": 3100
+    },
+    {
+      "from": "topic:birthday",
+      "to": "phase:bday_silence",
+      "flow": 740
+    },
+    {
+      "from": "phase:bday_silence",
+      "to": "signal:bday_nobody",
+      "flow": 740
+    },
+    {
+      "from": "signal:bday_nobody",
+      "to": "outcome:bday_cancelled",
+      "flow": 740
+    },
+    {
+      "from": "src:messages",
+      "to": "topic:something",
+      "flow": 3386
+    },
+    {
+      "from": "topic:something",
+      "to": "phase:some_burst",
+      "flow": 2900
+    },
+    {
+      "from": "phase:some_burst",
+      "to": "signal:some_silence",
+      "flow": 2900
+    },
+    {
+      "from": "signal:some_silence",
+      "to": "outcome:some_ghosted",
+      "flow": 2900
+    },
+    {
+      "from": "topic:something",
+      "to": "phase:some_trying",
+      "flow": 486
+    },
+    {
+      "from": "phase:some_trying",
+      "to": "signal:some_nobody",
+      "flow": 486
+    },
+    {
+      "from": "signal:some_nobody",
+      "to": "outcome:some_void",
+      "flow": 486
+    }
+  ]
+}
