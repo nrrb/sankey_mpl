@@ -102,8 +102,14 @@ def test_right_padding_too_narrow_for_the_last_column(nodes, links):
 
 
 def test_gutter_too_narrow_for_its_labels(nodes, links):
+    """`label_side_mode` is pinned, not incidental: the guard only applies there.
+
+    Under the default "outside" mode column 0's labels point right, so nothing has
+    to fit in the gutter and the check is skipped. Without this explicit "left" the
+    test would keep passing while exercising nothing.
+    """
     with pytest.raises(ValueError, match="label_gutter_px"):
-        render_sankey(nodes, links, {"label_gutter_px": 20})
+        render_sankey(nodes, links, {"label_side_mode": "left", "label_gutter_px": 20})
 
 
 def test_bad_label_side_mode(nodes, links):

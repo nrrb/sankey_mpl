@@ -82,7 +82,7 @@ the question never arises.
 ```python
 from sankey_mpl import render_sankey, save
 
-result = render_sankey(nodes, links, {"label_gutter_px": 120})
+result = render_sankey(nodes, links)
 save(result, "diagram.svg")
 save(result, "diagram.pdf")
 save(result, "diagram.png")
@@ -171,7 +171,7 @@ render_sankey(nodes, links, {"node_width_px": 14, "link_alpha": 0.7})
 | `pad_top` | `3` | space above the plot area |
 | `pad_bottom` | `3` | space below |
 | `pad_right` | `None` | space right; `None` means `node_width_px + 3`, the minimum that fits the last column |
-| `label_gutter_px` | `200` | space left, for labels. See [Labels](#labels) |
+| `label_gutter_px` | `3` | space left, for labels. Only `"left"` mode needs more. See [Labels](#labels) |
 | `preserve_column_pitch` | `True` | widen the figure to offset the gutter instead of narrowing the columns |
 | `background_color` | `None` | `None` exports transparent |
 
@@ -221,7 +221,7 @@ more common gentler S-curve; `(1.0, 0.0)` is nearly a straight diagonal.
 | `label_color` | `"#20282C"` | text colour |
 | `label_padding_px` | `4` | gap between node and label |
 | `label_border_width_px` | `1` | added to the label offset |
-| `label_side_mode` | `"left"` | `"left"` or `"outside"` |
+| `label_side_mode` | `"outside"` | `"outside"` points labels away from the plot middle; `"left"` puts them all left and needs a gutter |
 | `min_label_height_px` | `8` | nodes shorter than this get no label |
 | `label_collision_separation` | `True` | nudge apart labels still overlapping after the drop |
 | `font_paths` | `[]` | font files to register before drawing |
@@ -258,8 +258,11 @@ you configured. `save()` never passes them; don't add them.
 The only part that needs a decision from you, because sankey labels have nowhere
 good to go. Default behaviour:
 
-1. **Every label sits to the left of its node**, in the gutter for column 0 and
-   over the incoming ribbons for later columns.
+1. **Every label points away from the middle of the plot.** Columns in the left
+   half get their label on the right of the node, columns in the right half on the
+   left, so the outermost labels lean into the figure rather than off its edges.
+   This mirrors the original library. It needs no gutter, and the cost is that
+   interior labels sit over the ribbons leaving their own node.
 2. **Nodes shorter than `min_label_height_px` get no label.** A thin node's label
    would collide with its neighbours and no label is better than two overlapping
    ones. Check `.labels_dropped` to see what was suppressed, and mention those
@@ -268,17 +271,57 @@ good to go. Default behaviour:
    both labels of a colliding pair off their shared midpoint. Order is preserved,
    so labels never swap places relative to their nodes.
 
+### The one collision the separation pass cannot fix
+
+Step 3 works **within a column**. That is deliberate, but it leaves one gap, and it
+is the gap the default rule creates: the column just left of the plot middle aims
+its labels right, and the column just right of it aims them left, so both land in
+the same space between the two columns. Those two labels are in different columns, so
+the separation pass never compares them, and they can print on top of each other.
+
+Nothing detects this for you. If your labels are long, either give the figure enough
+width that both fit in the column pitch, or switch to `"left"` mode, where every
+label points the same way and the pass sees every collision. A quick check:
+
+```python
+result = render_sankey(nodes, links, config)
+for label in result.labels:
+    width = text_width(label["text"], result.config)
+    span = (
+        (label["x"], label["x"] + width)
+        if label["side"] == "right"
+        else (label["x"] - width, label["x"])
+    )
+    print(label["text"], span, label["y"])
+```
+
+Two entries whose spans overlap at nearly the same `y` are drawn on top of each
+other. The gallery in the repository README is sized by exactly this measurement.
+
+### The alternative: keeping text off the ribbons
+
+`label_side_mode="left"` puts every label to the left of its node instead, in the
+gutter for column 0 and over the *incoming* ribbons for later columns. Interior
+labels then sit in the gap between columns rather than on the ribbons leaving their
+node, which reads better on a wide figure with long labels. Use it when legibility
+matters more than horizontal space.
+
+It is not a drop-in switch: it needs a gutter.
+
 ### Sizing the gutter
 
-`label_gutter_px` becomes the left padding, and column 0's labels have to fit in
-it. If they don't, the library raises rather than letting text run off the figure.
-Size it from your data:
+`label_gutter_px` becomes the left padding. Under the default it only has to be a
+hairline, which is why it defaults to `3`. Under `"left"` mode column 0's labels
+have to fit in it, and if they don't the library raises rather than letting text run
+off the figure. Size it from your data:
 
 ```python
 from sankey_mpl import render_sankey, text_width
 
 widest = max(text_width(spec["label"]) for spec in first_column_nodes.values())
-result = render_sankey(nodes, links, {"label_gutter_px": widest + 10})
+result = render_sankey(
+    nodes, links, {"label_side_mode": "left", "label_gutter_px": widest + 10}
+)
 ```
 
 A gutter eats into the plot area, which shortens every ribbon and steepens its
@@ -287,13 +330,9 @@ figure, so a 900px figure with a 200px gutter comes out 1097px wide with the
 column spacing a 900px figure would have had. Set it to `False` to keep the width
 you asked for and accept narrower columns.
 
-### The alternative
-
-`label_side_mode="outside"` mirrors the original library: labels point right in
-the left half of the plot and left in the right half. It needs no gutter, but
-interior labels then sit on top of the ribbons leaving their own node. Use it when
-horizontal space matters more than legibility, and set `label_gutter_px` to
-something small like `3`.
+That widening is also the trap in raising the gutter without switching modes: under
+the default nothing needs the room, so all you get is an empty left margin and a
+figure wider than you asked for.
 
 There is no "labels centred above nodes" mode. If that is what you need, suppress
 labels entirely (`min_label_height_px` above your tallest node) and place text
@@ -361,6 +400,7 @@ config = {
     "width_px": 720,  # the box you are drawing into
     "height_px": 360,
     "preserve_column_pitch": False,  # see below
+    "label_side_mode": "left",  # a gutter is only useful in this mode
     "label_gutter_px": 180,
     "link_flatten_alpha": True,
     "background_color": "#FFFFFF",  # what is actually behind the diagram
@@ -455,7 +495,7 @@ generated by running it. These are the deliberate exceptions.
 | | Original | Here | Why |
 |---|---|---|---|
 | Node gap | derived from the browser's backing-store height, so it changes with display density and dataset | `node_gap_px`, honoured exactly | the browser quantity has no meaning outside a browser |
-| Labels | one rule, no collision handling, no clipping | left side, drop rule, separation pass | a static image has no tooltip to rescue an unreadable label |
+| Labels | one rule, no collision handling, no clipping | same side rule, plus a drop rule and a separation pass | a static image has no tooltip to rescue an unreadable label |
 | Node outline | 1px, in a palette colour auto-assigned by a Chart.js plugin | none | it was never a design decision upstream |
 | Ribbon outline | 0.5px stroke in the gradient | none | not reproducible without rasterising |
 | Cycles, backward links, disconnected graphs | handled by force-placing nodes or looping ribbons over the top of the canvas | raise | those outputs mislead more than they inform |
@@ -476,7 +516,7 @@ Every one of these is a refusal to draw something misleading.
 | `these nodes are not reachable...` | the graph has disconnected pieces | render each piece separately |
 | `node X is shorter than the links attached to it` | `node_size_mode="min"` on unbalanced flow | use `"max"`, or balance the data |
 | `a Npx gap repeated k times does not fit` | `node_gap_px` too large for the height and node count | reduce the gap or increase `height_px` |
-| `label_gutter_px=N is too narrow` | column 0's widest label does not fit | widen the gutter using `text_width()`, or use `"outside"` mode |
+| `label_gutter_px=N is too narrow` | column 0's widest label does not fit, only possible in `"left"` mode | widen the gutter using `text_width()`, or drop back to the default `"outside"` mode |
 | `pad_right must be at least...` | right padding cannot fit the last column's rectangles | leave `pad_right=None` |
 | `padding leaves no room to draw` | padding exceeds the figure | increase `width_px`/`height_px` |
 | `unknown config keys` | a typo, or camelCase instead of snake_case | the message lists every valid key |
@@ -493,6 +533,7 @@ render_sankey(
     {
         "width_px": 1000,
         "height_px": 420,
+        "label_side_mode": "left",
         "label_gutter_px": 180,
         "label_color": "#20282C",
         "link_flatten_alpha": True,
@@ -522,16 +563,16 @@ config = {"device_pixel_ratio": 1, "svg_fonttype": "path"}
 save(render_sankey(nodes, links, config), "figure.pdf", config)
 ```
 
-**Compact, no gutter**
+**Labels off the ribbons, on a wide figure**
 
 ```python
 render_sankey(
     nodes,
     links,
     {
-        "label_side_mode": "outside",
-        "label_gutter_px": 3,
-        "min_label_height_px": 12,
+        "width_px": 1400,
+        "label_side_mode": "left",
+        "label_gutter_px": text_width("your longest first-column label") + 20,
     },
 )
 ```

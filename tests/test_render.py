@@ -12,12 +12,14 @@ from sankey_mpl import build_frame, draw_sankey, render_sankey, save, text_width
 
 @pytest.fixture
 def wide_enough(nodes) -> dict:
-    """A gutter that fits the example's longest first-column label.
+    """A gutter that fits the dataset's longest first-column label.
 
-    Deliberately computed rather than hardcoded: the default gutter is sized for a
-    typical label, and this fixture's longest one is near the limit, so a
-    hardcoded number here would break whenever the example data or the font
-    changes.
+    Only `label_side_mode="left"` needs this, since the default points column 0's
+    labels rightward into the plot instead. Tests that are not about labels still
+    take it, because it costs nothing and keeps them insensitive to the default.
+
+    Deliberately computed rather than hardcoded: a constant here would encode one
+    dataset's longest label and fail on the next one, or on a font change.
     """
     longest = max(
         (spec.get("label", key) for key, spec in nodes.items() if key.startswith("src:")),
@@ -70,14 +72,38 @@ def test_dropping_can_be_switched_off(nodes, links, wide_enough):
     assert len(kept.labels) == len(kept.layout.nodes)
 
 
-def test_labels_all_point_left_by_default(nodes, links, wide_enough):
-    result = render_sankey(nodes, links, wide_enough)
+def test_labels_point_outward_from_the_middle_by_default(nodes, links):
+    """The default mirrors the reference: away from the middle of the plot.
+
+    Asserts the *split*, not merely that both sides occur, because "both sides
+    appear somewhere" would still pass if the sides were assigned per node instead
+    of per column, which is the mistake that would look almost right.
+    """
+    result = render_sankey(nodes, links)
+
+    by_column: dict[int, set[str]] = {}
+    for label in result.labels:
+        column = result.layout.nodes[label["key"]].column
+        by_column.setdefault(column, set()).add(label["side"])
+
+    for column, sides in by_column.items():
+        assert len(sides) == 1, f"column {column} has labels on both sides: {sides}"
+
+    # The outermost columns are the two the rule is unambiguous about: column 0 is
+    # always in the left half and the last column always in the right half.
+    assert by_column[min(by_column)] == {"right"}
+    assert by_column[max(by_column)] == {"left"}
+
+    # Right-pointing columns must all come before left-pointing ones; a single
+    # switchover is what "outward from the middle" means.
+    sides_in_order = [next(iter(by_column[c])) for c in sorted(by_column)]
+    assert sides_in_order == sorted(sides_in_order, reverse=True), sides_in_order
+
+
+def test_left_mode_puts_every_label_on_the_left(nodes, links, wide_enough):
+    """The alternative, which needs the gutter that `wide_enough` supplies."""
+    result = render_sankey(nodes, links, {**wide_enough, "label_side_mode": "left"})
     assert {label["side"] for label in result.labels} == {"left"}
-
-
-def test_outside_mode_puts_early_columns_on_the_right(nodes, links, wide_enough):
-    result = render_sankey(nodes, links, {**wide_enough, "label_side_mode": "outside"})
-    assert {label["side"] for label in result.labels} == {"left", "right"}
 
 
 # Comfortably above the natural label spacing of every dataset, so each one has

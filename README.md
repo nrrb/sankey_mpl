@@ -21,7 +21,7 @@ links = [
     {"from": "signup", "to": "lapsed", "flow": 2280},
 ]
 
-result = render_sankey(nodes, links, {"label_gutter_px": 120})
+result = render_sankey(nodes, links)
 save(result, "funnel.svg")
 ```
 

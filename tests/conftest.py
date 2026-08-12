@@ -12,9 +12,15 @@ paths only appear in one of them. ``tests/data/datasets.json`` records what each
 is for.
 
 Three of the library's defaults deliberately differ from the reference and move
-geometry: the node gap, the label gutter, and the label side rule. Tests that
-compare pixel positions therefore run under ``parity_config``, which puts those
-three back. Tests of the defaults' own behaviour do not use it.
+geometry: the node gap, the label drop rule, and the label separation pass. Tests
+that compare pixel positions therefore run under ``parity_config``, which puts
+those three back. Tests of the defaults' own behaviour do not use it.
+
+The label *side* rule and the gutter used to be on that list and are not any more:
+the default is now the reference's own outward-pointing rule with a hairline gutter,
+so ``parity_config`` setting them is redundant rather than corrective. They are left
+in it deliberately, since a parity configuration that spells out what it depends on
+does not silently stop being parity when a default moves again.
 
 Nothing here hardcodes a number that the data could supply instead. Each
 dataset's ``parity_config`` is derived from its own golden, so adding or changing

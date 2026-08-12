@@ -29,8 +29,12 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "pad_top": 3,
     "pad_bottom": 3,
     "pad_right": None,
-    # Room reserved on the left for labels, which all point leftward.
-    "label_gutter_px": 200,
+    # Room reserved on the left for labels. Only column 0's labels can land here,
+    # and under the default `label_side_mode` they point right instead, so the
+    # default is just a hairline margin. Raise it when switching to "left" mode,
+    # which needs the whole widest first-column label to fit: `text_width()` sizes
+    # it from real data. The two keys are coupled; changing one alone looks wrong.
+    "label_gutter_px": 3,
     # A gutter eats into the plot area, which shortens every ribbon. True widens
     # the figure to keep the column spacing instead; False accepts narrower
     # columns. Either way the choice is reported back on the result.
@@ -75,10 +79,16 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "label_color": "#20282C",
     "label_padding_px": 4,
     "label_border_width_px": 1,
-    # "left" puts every label to the left of its node. "outside" mirrors the
-    # original library: labels point right in the left half of the plot and left
-    # in the right half, which needs no gutter but lets labels overlap ribbons.
-    "label_side_mode": "left",
+    # "outside" points labels away from the middle: columns in the left half of the
+    # plot get their label on the right, columns in the right half on the left. This
+    # mirrors the original library and is the default because it is what readers of
+    # a sankey expect, and because it needs no gutter. The cost is that interior
+    # labels sit on top of the ribbons leaving their own node.
+    #
+    # "left" puts every label to the left of its node instead, which keeps text off
+    # the ribbons entirely but needs `label_gutter_px` widened to fit column 0's
+    # labels, and refuses to draw if they do not fit.
+    "label_side_mode": "outside",
     # Nodes shorter than this get no label, on the grounds that no label beats
     # two overlapping ones.
     "min_label_height_px": 8,
