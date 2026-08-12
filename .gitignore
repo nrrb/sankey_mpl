@@ -9,3 +9,10 @@ dist/
 .ruff_cache/
 tools/node_modules/
 tools/package-lock.json
+
+# Maintainer handoff notes and roadmap, deliberately not tracked: it is written for
+# whoever works on the library, not for anyone using it, and a roadmap with open
+# questions on the repo landing page reads as unfinished business next to the README.
+# Ignored rather than merely uncommitted so `git add .` cannot sweep it in.
+# Anything an end user needs belongs in README.md or docs/usage.md instead.
+PLAN.md
