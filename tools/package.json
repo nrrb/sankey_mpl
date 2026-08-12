@@ -1,0 +1,14 @@
+{
+  "name": "sankey-mpl-golden-tools",
+  "private": true,
+  "type": "module",
+  "description": "Regenerates the example fixture and its golden geometry by running the reference JavaScript implementation. Not part of the Python package.",
+  "scripts": {
+    "generate": "node generate_golden.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.5",
+    "chart.js": "^4.5.1",
+    "chartjs-chart-sankey": "^0.15.0"
+  }
+}

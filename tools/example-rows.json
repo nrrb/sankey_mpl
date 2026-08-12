@@ -1,0 +1,69 @@
+{
+  "_comment": [
+    "Source data for the example fixture and its golden geometry. Entirely",
+    "synthetic: abstract group/route/sink names and round numbers, chosen for the",
+    "structural properties the tests need rather than to resemble any real",
+    "dataset.",
+    "",
+    "What the shape exercises:",
+    "  - one source feeding six groups spanning four orders of magnitude, so the",
+    "    smallest nodes are thin enough to trip the label drop rule;",
+    "  - routes and sinks shared between groups, so the per-column overlap sweep",
+    "    and the gap carry-over between columns both fire;",
+    "  - group b reaching two different sinks through the same route, so two rows",
+    "    merge into one link;",
+    "  - a route used by exactly one group (passive) with a tiny flow, so a",
+    "    near-zero-height node is in play.",
+    "",
+    "Regenerate the derived files with: node tools/generate_golden.mjs"
+  ],
+  "source": "total",
+  "rows": [
+    { "group": "f", "route": "deferred", "sink": "released", "flow": 1400 },
+    { "group": "e", "route": "deferred", "sink": "released", "flow": 52000 },
+    { "group": "a", "route": "auto", "sink": "archived", "flow": 1090000 },
+    { "group": "a", "route": "manual", "sink": "archived", "flow": 7700 },
+    { "group": "c", "route": "auto", "sink": "blocked", "flow": 89000 },
+    { "group": "c", "route": "manual", "sink": "blocked", "flow": 4600 },
+    { "group": "c", "route": "passive", "sink": "blocked", "flow": 60 },
+    { "group": "b", "route": "auto", "sink": "quarantined", "flow": 760000 },
+    { "group": "b", "route": "manual", "sink": "quarantined", "flow": 8500 },
+    { "group": "b", "route": "auto", "sink": "archived", "flow": 76000 },
+    { "group": "d", "route": "manual", "sink": "archived", "flow": 2100 }
+  ],
+  "names": {
+    "total": "All Items",
+    "a": "Group A",
+    "b": "Group B",
+    "c": "Group C",
+    "d": "Group D",
+    "e": "Group E",
+    "f": "Group F",
+    "auto": "Automatic",
+    "manual": "Manual",
+    "passive": "Passive",
+    "deferred": "Deferred",
+    "archived": "Archived",
+    "blocked": "Blocked",
+    "quarantined": "Quarantined",
+    "released": "Released"
+  },
+  "colors": {
+    "src": "#9AA5B1",
+    "route": "#9AA5B1",
+    "sink": "#54A24B",
+    "groups": {
+      "a": "#4C78A8",
+      "b": "#F58518",
+      "c": "#E45756",
+      "d": "#B279A2",
+      "e": "#72B7B2",
+      "f": "#7F8C99"
+    }
+  },
+  "render": {
+    "cssWidth": 900,
+    "cssHeight": 360,
+    "devicePixelRatio": 3
+  }
+}

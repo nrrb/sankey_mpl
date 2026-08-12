@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sankey_mpl"
+description = "Sankey diagrams for matplotlib, as clean vector output"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
+keywords = ["sankey", "matplotlib", "diagram", "flow", "visualization", "svg"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Framework :: Matplotlib",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Visualization",
+  "Typing :: Typed",
+]
+dependencies = [
+  "matplotlib>=3.7",
+  "numpy>=1.22",
+]
+dynamic = ["version"]
+
+[[project.authors]]
+name = "Nicholas Bennett"
+
+[project.urls]
+Homepage = "https://github.com/nrrb/sankey_mpl"
+Documentation = "https://github.com/nrrb/sankey_mpl/blob/main/docs/usage.md"
+Issues = "https://github.com/nrrb/sankey_mpl/issues"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7",
+  "ruff>=0.6",
+]
+
+[tool.hatch.version]
+path = "src/sankey_mpl/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sankey_mpl"]
+
+[tool.hatch.build.targets.sdist]
+# The generator is worth shipping in the sdist so the golden data stays
+# reproducible from a source release; its node_modules are not.
+include = [
+  "src",
+  "tests",
+  "tools/*.mjs",
+  "tools/*.json",
+  "docs",
+  "README.md",
+  "LICENSE",
+  "NOTICE",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 90
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests favour readable assertions over strict style.
+"tests/*" = ["E501"]
