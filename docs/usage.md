@@ -2,7 +2,7 @@
 
 How to drive the library, what every configuration key does, and where it will
 push back. If you only read one section, read [The data model](#the-data-model)
-and [Labels](#labels) — labels are the only part that needs a decision from you.
+and [Labels](#labels). Labels are the only part that needs a decision from you.
 
 - [Install](#install)
 - [The data model](#the-data-model)
@@ -50,7 +50,7 @@ links = [
   in `nodes` that no link mentions is ignored, and a key in `links` missing from
   `nodes` gets its key as its label and black as its colour. `render_sankey({},
   links)` works.
-- **`flow` is any positive number** in any unit — messages, dollars, people. The
+- **`flow` is any positive number** in any unit: messages, dollars, people. The
   library calls it a *flow unit* and scales the whole diagram so the tallest
   column fits the plot area. Node heights and ribbon thicknesses are all
   proportional to it, on one shared scale, so a unit is the same number of pixels
@@ -71,8 +71,8 @@ tie-break in vertical placement.** Placement inside a column is resolved by a
 traversal that compares subtree size, then node degree, then flow; where all three
 tie, the order the links were supplied in decides.
 
-In practice that means data with distinct flows is insensitive to order — a
-reordered query result draws the same diagram — while genuinely equal flows swap
+In practice that means data with distinct flows is insensitive to order (a
+reordered query result draws the same diagram), while genuinely equal flows swap
 places if you reverse them. Inherited deliberately from the original
 implementation so diagrams match it. Build your link list in a stable order and
 the question never arises.
@@ -90,7 +90,7 @@ save(result, "diagram.png")
 
 `render_sankey` returns a `SankeyFigure`. Its `.figure` is an ordinary matplotlib
 `Figure`, so it can be embedded, further annotated, or saved with matplotlib
-directly — with one caveat, see [Export](#export).
+directly, with one caveat; see [Export](#export).
 
 ## API
 
@@ -101,14 +101,14 @@ than being ignored, so a typo is an error and not a silently unchanged picture.
 
 ### `draw_sankey(ax, nodes, links, config=None) -> SankeyDrawing`
 
-Draws into an axes you already have, for embedding the diagram in a larger figure
-— a report page, a dashboard, a multi-panel comparison. Same three arguments as
+Draws into an axes you already have, for embedding the diagram in a larger figure:
+a report page, a dashboard, a multi-panel comparison. Same three arguments as
 `render_sankey` after the axes. See [Embedding](#embedding) for the four things
 that behave differently in this mode, all of which bite silently.
 
 ### `build_frame(nodes, links, config=None) -> Frame`
 
-Resolves everything needed to draw — layout, scales, padding — without drawing or
+Resolves everything needed to draw (layout, scales, padding) without drawing or
 creating a figure. Call it when you need the diagram's final pixel size *before*
 choosing where to put it: `label_gutter_px` and `preserve_column_pitch` both feed
 into `frame.width`, so the width that comes out is not necessarily the `width_px`
@@ -117,7 +117,7 @@ that went in. The merged config comes back on `frame.config`.
 ### `SankeyFigure` / `SankeyDrawing`
 
 `render_sankey` returns a `SankeyFigure`; `draw_sankey` returns a
-`SankeyDrawing`, which is the same thing without `.figure` — a diagram drawn into
+`SankeyDrawing`, which is the same thing without `.figure`: a diagram drawn into
 someone else's axes does not own a figure.
 
 | Attribute | What it is |
@@ -131,7 +131,7 @@ someone else's axes does not own a figure.
 | `.as_dict()` | all of the above as plain JSON-friendly data |
 
 `as_dict()` is the introspection hatch. It gives every node's column, vertical
-position and pixel rectangle, and every ribbon's endpoints and thickness — useful
+position and pixel rectangle, and every ribbon's endpoints and thickness, useful
 for testing, for debugging a layout that looks wrong, and for driving your own
 annotations.
 
@@ -145,8 +145,8 @@ the gap has to be solved against the final vertical scale.
 ### `save(figure, path, config=None)`
 
 Writes SVG, PDF or PNG with reproducible bytes. Format comes from the extension.
-Accepts a `SankeyFigure` (preferred — it reuses the config the diagram was drawn
-with) or a bare matplotlib `Figure`.
+Accepts a `SankeyFigure` (preferred, since it reuses the config the diagram was
+drawn with) or a bare matplotlib `Figure`.
 
 ### `text_width(text, config=None) -> float`
 
@@ -187,8 +187,8 @@ render_sankey(nodes, links, {"node_width_px": 14, "link_alpha": 0.7})
 | `align_sinks_right` | `True` | push nodes with no outgoing links to the last column |
 
 `node_gap_px` is exact: ask for 4.5 and the rendered gap measures 4.5 pixels,
-whatever the data. That is less trivial than it sounds — the gaps change the
-diagram's total height, which changes the scale the gaps are drawn at — so the
+whatever the data. That is less trivial than it sounds: the gaps change the
+diagram's total height, which changes the scale the gaps are drawn at, so the
 library solves for it rather than dividing once.
 
 `node_size_mode="min"` can make a node shorter than the links attached to it,
@@ -329,8 +329,8 @@ Node colours come from `nodes`; the library has no palette of its own and never
 picks colours for you. An uncoloured node is black.
 
 Ribbons are drawn as a gradient from the source node's colour to the target's. A
-matplotlib patch cannot carry a gradient fill, and the usual workaround — a
-clipped image per ribbon — would rasterise them. Instead each ribbon is cut into
+matplotlib patch cannot carry a gradient fill, and the usual workaround, a
+clipped image per ribbon, would rasterise them. Instead each ribbon is cut into
 `n_strips` slices, each an exact piece of the same curve, each filled flat with the
 colour the gradient would have there. Below about 24 slices the banding becomes
 visible; 48 is invisible at print resolution.
@@ -376,20 +376,20 @@ Four things behave differently from `render_sankey`, and all four bite silently
 rather than raising:
 
 - **Set `preserve_column_pitch=False` and `width_px` to your box width.** The
-  default *widens* the diagram to offset the label gutter — a 900px request with
-  the default 200px gutter comes out 1097px — which overflows the space you
+  default *widens* the diagram to offset the label gutter (a 900px request with
+  the default 200px gutter comes out 1097px), which overflows the space you
   allotted. With it off, `frame.width == width_px` and the box is exact. If you
   want the widening, call `build_frame()` first and size the box from
   `frame.width` instead.
 - **The axes limits are not yours to set.** `draw_sankey` sets them itself, to
   `xlim (0, frame.width)` and `ylim (frame.height, 0)`, because those limits *are*
-  the [pixel contract](#the-pixel-contract) — getting them wrong rescales the
+  the [pixel contract](#the-pixel-contract): getting them wrong rescales the
   diagram instead of failing. Anything you set beforehand is overwritten.
 - **The axes facecolor is left alone**, since an embedded diagram sits on a
   surface its host already painted. So `background_color` here does only its other
   job: telling `link_flatten_alpha=True` what to pre-blend the ribbons against. It
-  still has to be set, and set to the colour genuinely behind the diagram — the
-  card, not the page, if those differ — or the ribbons come out blended for a
+  still has to be set, and set to the colour genuinely behind the diagram (the
+  card, not the page, if those differ), or the ribbons come out blended for a
   surface that isn't there.
 - **The axes box must have the aspect the frame asks for.** One data unit is one
   pixel only if `frame.width × frame.height` pixels of figure are actually
@@ -412,7 +412,7 @@ Nothing in the output is rasterised, so SVG and PDF scale without softening and
 their text can be selected, copied and searched.
 
 **SVG fonts are a real choice.** The default `svg_fonttype="none"` writes
-`font-family` and leaves the font to whatever opens the file — the text stays
+`font-family` and leaves the font to whatever opens the file: the text stays
 selectable, but it needs that font installed or it will substitute. `"path"`
 converts glyphs to outlines: identical appearance anywhere and fully
 self-contained, at the cost of selectable text and a larger file. Choose `"none"`
@@ -426,14 +426,14 @@ With `background_color=None` (the default) output is transparent, so the diagram
 composites onto whatever page it lands on. Remember that alpha ribbons over a
 transparent background take their tint from that page: a ribbon over white reads
 lighter than the same ribbon over a dark surface. If you are targeting a dark
-page, set `label_color` to something light — the default `#20282C` assumes a light
+page, set `label_color` to something light: the default `#20282C` assumes a light
 one.
 
 ## Reproducibility
 
 The same input produces byte-identical output. This is not matplotlib's default
-behaviour — SVG element ids derive from object identity and every format embeds a
-timestamp — so `save()` fixes the id salt and drops the timestamps.
+behaviour: SVG element ids derive from object identity and every format embeds a
+timestamp, so `save()` fixes the id salt and drops the timestamps.
 
 The guarantee holds **within one matplotlib version, not across versions.**
 matplotlib changes its own output between releases. So:
