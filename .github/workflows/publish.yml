@@ -21,10 +21,15 @@ name: publish
 on:
   push:
     tags: ["v*"]
-  # Lets you publish a tag that already exists, such as v0.1.0, which was pushed
-  # before this workflow did: run it from the Actions tab and select the tag as the
-  # ref. Dispatching from a branch instead fails the version check below, which is
-  # deliberate, since a release must come from a tag.
+  # Run from the Actions tab, selecting a tag as the ref, to publish or rehearse a tag
+  # that is already pushed. Dispatching from a branch fails the version check below,
+  # which is deliberate, since a release must come from a tag.
+  #
+  # The tag you select must itself contain this file. GitHub resolves a dispatched
+  # workflow on the selected ref, so a tag created before this workflow existed reports
+  # "Workflow does not exist or does not have a workflow_dispatch trigger in this tag"
+  # and cannot be published this way. Re-cut the tag on a commit that includes this
+  # file, or release a newer version.
   #
   # Defaults to TestPyPI, so the cautious path is the one you get by pressing enter.
   workflow_dispatch:
