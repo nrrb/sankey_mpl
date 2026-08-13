@@ -104,7 +104,7 @@ class Frame:
         """``(x, y, width, height)`` in pixels, with y measured downward."""
         return (
             self.x_pixel(node.column),
-            self.y_pixel(node.y or 0.0),
+            self.y_pixel(node.y),
             float(self.config["node_width_px"]),
             node.size * self.px_per_unit,
         )
@@ -120,10 +120,10 @@ class Frame:
         source = self.layout.nodes[link["from"]]
         target = self.layout.nodes[link["to"]]
         inset = float(self.config["link_inset_px"])
-        start_units = (source.y or 0.0) + self.layout.link_offset(
+        start_units = source.y + self.layout.link_offset(
             source, "outgoing", link["to"], index
         )
-        end_units = (target.y or 0.0) + self.layout.link_offset(
+        end_units = target.y + self.layout.link_offset(
             target, "incoming", link["from"], index
         )
         return {

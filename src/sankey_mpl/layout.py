@@ -66,7 +66,9 @@ class Node:
         "outflow",
         "size",
         "column",
+        "_column_set",
         "y",
+        "_y_set",
         "y_unpadded",
         "gap_slots",
         "outgoing",
@@ -81,9 +83,17 @@ class Node:
         self.outflow = 0.0
         #: Height of the node in flow units.
         self.size = 0.0
-        self.column: int | None = None
-        #: Top edge in flow units, after gaps have been applied.
-        self.y: float | None = None
+        #: Column index, assigned by levelling. 0 until then, which is what
+        #: ``_column_set`` distinguishes: the public contract is that this is a
+        #: real index by the time a layout is returned, so it is typed ``int``
+        #: rather than optional and callers need no narrowing.
+        self.column: int = 0
+        self._column_set = False
+        #: Top edge in flow units, after gaps have been applied. 0.0 until the
+        #: traversal reaches this node; ``_y_set`` is what tells the two apart,
+        #: and an unreached node is what the disconnected-graph guard detects.
+        self.y: float = 0.0
+        self._y_set = False
         #: Top edge before gaps. Kept because the gap solve needs both.
         self.y_unpadded = 0.0
         #: How many gap quanta sit above this node. See _count_gap_slots.
@@ -290,13 +300,14 @@ def _assign_columns(
         )
         for key in keys:
             node = nodes.get(key)
-            if node is not None and node.column is None:
+            if node is not None and not node._column_set:
                 node.column = column
+                node._column_set = True
             remaining.pop(key, None)
         if remaining:
             column += 1
 
-    max_column = max((node.column or 0) for node in node_list)
+    max_column = max(node.column for node in node_list)
 
     if align_sinks_right:
         # Every node that is never a link source moves to the last column, so
@@ -306,6 +317,7 @@ def _assign_columns(
         for node in node_list:
             if node.key not in link_sources:
                 node.column = max_column
+                node._column_set = True
     return max_column
 
 
@@ -380,11 +392,12 @@ def _walk_incoming(node: Node, y: float) -> float:
     _sort_by_subtree(node.incoming, "incoming")
     for ref in node.incoming:
         upstream = ref.node
-        if upstream.y is None:
+        if not upstream._y_set:
             upstream.y = y
+            upstream._y_set = True
             _walk_incoming(upstream, y + _EPSILON if y else 0.0)
         y = max(upstream.y + upstream.outflow, y)
-    return (node.y or 0.0) + node.size
+    return node.y + node.size
 
 
 def _walk_outgoing(node: Node, y: float) -> float:
@@ -393,11 +406,12 @@ def _walk_outgoing(node: Node, y: float) -> float:
     _sort_by_subtree(node.outgoing, "outgoing")
     for ref in node.outgoing:
         downstream = ref.node
-        if downstream.y is None:
+        if not downstream._y_set:
             downstream.y = y
+            downstream._y_set = True
             _walk_outgoing(downstream, y + _EPSILON if y else 0.0)
         y = max(downstream.y + downstream.extent, y)
-    return (node.y or 0.0) + node.size
+    return node.y + node.size
 
 
 def _resolve_overlaps(node_list: Sequence[Node], max_column: int) -> None:
@@ -410,24 +424,25 @@ def _resolve_overlaps(node_list: Sequence[Node], max_column: int) -> None:
     for column in range(max_column + 1):
         members = sorted(
             (node for node in node_list if node.column == column),
-            key=lambda node: node.y or 0.0,
+            key=lambda node: node.y,
         )
         floor = 0.0
         for node in members:
-            if (node.y or 0.0) < floor:
+            if node.y < floor:
                 node.y = floor
-            floor = (node.y or 0.0) + node.size
+            floor = node.y + node.size
 
 
 def _place_vertically(node_list: Sequence[Node], max_column: int) -> None:
     seed = _seed_node(node_list, max_column)
     seed.y = 0.0
+    seed._y_set = True
     _walk_incoming(seed, 0.0)
     _walk_outgoing(seed, 0.0)
     # The original has a recovery pass for nodes the traversal never reached.
     # It cannot trigger for a graph whose nodes are all reachable from the seed,
     # which is every connected forward graph, so this refuses instead.
-    stranded = [node.key for node in node_list if node.y is None]
+    stranded = [node.key for node in node_list if not node._y_set]
     if stranded:
         raise ValueError(
             "these nodes are not reachable from the largest node and cannot be "
@@ -463,9 +478,9 @@ def _count_gap_slots(node_list: list[Node]) -> None:
             grid.append([])
         return column_slot[column]
 
-    node_list.sort(key=lambda node: (node.column, node.y or 0.0, node.size))
+    node_list.sort(key=lambda node: (node.column, node.y, node.size))
     for node in node_list:
-        node.y_unpadded = node.y or 0.0
+        node.y_unpadded = node.y
         index = slot_for(node.column)
         column = grid[index]
         y = node.y_unpadded
@@ -577,13 +592,13 @@ def _stack_links(node_list: Sequence[Node]) -> None:
                 "which would require overlapping ribbons"
             )
 
-        node.incoming.sort(key=lambda ref: (ref.node.y or 0.0) + ref.node.outflow / 2.0)
+        node.incoming.sort(key=lambda ref: ref.node.y + ref.node.outflow / 2.0)
         offset = 0.0
         for ref in node.incoming:
             ref.offset = offset
             offset += ref.flow
 
-        node.outgoing.sort(key=lambda ref: (ref.node.y or 0.0) + ref.node.inflow / 2.0)
+        node.outgoing.sort(key=lambda ref: ref.node.y + ref.node.inflow / 2.0)
         offset = 0.0
         for ref in node.outgoing:
             ref.offset = offset

@@ -108,7 +108,8 @@ def parse_color(value: Any) -> tuple[float, float, float]:
             for part in parts[:3]
         ]
         return (channels[0] / 255.0, channels[1] / 255.0, channels[2] / 255.0)
-    return tuple(float(channel) for channel in to_rgb(text))
+    red, green, blue = to_rgb(text)
+    return (float(red), float(green), float(blue))
 
 
 def _blend(
