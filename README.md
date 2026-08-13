@@ -1,5 +1,21 @@
 # sankey_mpl
 
+[![CI](https://github.com/nrrb/sankey_mpl/actions/workflows/ci.yml/badge.svg)](https://github.com/nrrb/sankey_mpl/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/python/required-version-toml?tomlFilePath=https://raw.githubusercontent.com/nrrb/sankey_mpl/main/pyproject.toml)](pyproject.toml)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+<!--
+Add once the package is actually on PyPI, and not before: until then both of these
+render as the words "package or version not found", which looks worse than no badge.
+
+[![PyPI](https://img.shields.io/pypi/v/sankey-mpl.svg)](https://pypi.org/project/sankey-mpl/)
+[![Downloads](https://img.shields.io/pypi/dm/sankey-mpl.svg)](https://pypi.org/project/sankey-mpl/)
+
+The distribution name is `sankey-mpl`: PEP 503 normalises the underscore in
+`name = "sankey_mpl"` to a hyphen, so that is what the index serves it under.
+-->
+
 Sankey diagrams for matplotlib, as clean vector output.
 
 ![86,400 Seconds in the Life of a Cat](examples/catday.png)
