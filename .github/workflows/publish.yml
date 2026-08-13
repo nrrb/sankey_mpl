@@ -48,22 +48,45 @@ jobs:
       # src/sankey_mpl/__init__.py, so tagging v0.2.0 without bumping that file
       # publishes a wheel labelled 0.1.0. PyPI would accept it and the version number
       # would then be wrong forever, since a released version can never be replaced.
-      - name: Tag must match __version__
+      - name: Tag, __version__ and CHANGELOG must agree
         run: |
           python - <<'PY'
           import os, pathlib, re, sys
 
           ref = os.environ["GITHUB_REF_NAME"]
           tag = ref.removeprefix("v")
+
           source = pathlib.Path("src/sankey_mpl/__init__.py").read_text()
           version = re.search(r'__version__ = "([^"]+)"', source).group(1)
-          print(f"ref {ref!r} -> tag {tag!r}, __version__ {version!r}")
+
+          # The newest released heading, skipping [Unreleased], which is not a semver
+          # number and so cannot match this pattern.
+          changelog = pathlib.Path("CHANGELOG.md").read_text()
+          heading = re.search(r"^## \[(\d+\.\d+\.\d+)\]", changelog, re.M)
+          documented = heading.group(1) if heading else None
+
+          print(f"ref {ref!r} -> tag {tag!r}")
+          print(f"__version__ {version!r}")
+          print(f"CHANGELOG   {documented!r}")
+
+          problems = []
           if tag != version:
-              sys.exit(
-                  f"refusing to publish: ref {ref!r} does not match __version__ "
-                  f"{version!r}. Bump src/sankey_mpl/__init__.py and retag, or "
-                  f"dispatch this workflow from a tag rather than a branch."
+              problems.append(
+                  f"ref {ref!r} does not match __version__ {version!r}. Bump "
+                  f"src/sankey_mpl/__init__.py and retag, or dispatch this workflow "
+                  f"from a tag rather than a branch."
               )
+          if documented != version:
+              problems.append(
+                  f"CHANGELOG.md's newest release heading is {documented!r} but "
+                  f"__version__ is {version!r}. A release with no entry describing it "
+                  f"is worse than no release: PyPI versions are permanent, so the "
+                  f"record cannot be fixed afterwards. Run "
+                  f"`python tools/bump_version.py <major|minor|patch>`, which keeps "
+                  f"both in step."
+              )
+          if problems:
+              sys.exit("refusing to publish:\n  " + "\n  ".join(problems))
           PY
 
       - run: python -m pip install --upgrade pip build twine
