@@ -176,17 +176,46 @@ def test_svg_contains_no_raster_images(nodes, links, wide_enough, tmp_path):
 
 
 def test_svg_keeps_text_as_text_by_default(nodes, links, wide_enough, tmp_path):
+    """Every label is a real SVG text element, so it stays selectable.
+
+    Asserted as text elements rather than by grepping for ``font-family``, which is
+    how current matplotlib happens to express the font and not how every supported
+    version does. On matplotlib 3.7 the same diagram carries proper ``<text>``
+    elements and no ``font-family`` anywhere, so the old assertion failed on the
+    declared minimum while the property it stood for held perfectly. The minimums
+    CI job is what caught that.
+
+    One element per drawn label, and no ``<use>``: that is the pair that separates
+    this mode from ``svg_fonttype="path"`` on every version.
+    """
     result = render_sankey(nodes, links, wide_enough)
     path = tmp_path / "diagram.svg"
     save(result, str(path))
-    assert "font-family" in path.read_text()
+    body = path.read_text()
+    assert body.count("<text") == len(result.labels)
+    assert "<use" not in body, "glyphs were referenced rather than written as text"
 
 
 def test_svg_can_embed_glyph_outlines_instead(nodes, links, wide_enough, tmp_path):
-    result = render_sankey(nodes, links, {**wide_enough, "svg_fonttype": "path"})
+    """The opposite mode: glyphs become outlines, so no text element survives.
+
+    Deliberately does **not** assert that the label strings are absent, tempting as
+    that reads. matplotlib writes each string into an SVG comment next to the glyph
+    references, so the text is still findable in the file and an absence check would
+    fail for a reason that has nothing to do with this setting. What changes is
+    whether the text is a rendered element, so that is what gets checked.
+
+    The old assertion here inverted the same ``font-family`` grep, which passes
+    vacuously on any matplotlib that never writes that attribute.
+    """
+    config = {**wide_enough, "svg_fonttype": "path"}
+    result = render_sankey(nodes, links, config)
     path = tmp_path / "outlined.svg"
-    save(result, str(path), {**wide_enough, "svg_fonttype": "path"})
-    assert "font-family" not in path.read_text()
+    save(result, str(path), config)
+    body = path.read_text()
+    assert result.labels, "no labels were drawn, so this would pass vacuously"
+    assert "<text" not in body
+    assert "<use" in body, "glyphs should be outlines referenced by use elements"
 
 
 def test_pdf_is_written(nodes, links, wide_enough, tmp_path):
