@@ -2,10 +2,16 @@
 # in this repository or in its secrets. PyPI verifies the identity of this workflow
 # directly, which means there is no upload credential to leak or rotate.
 #
-# This file is inert until a matching publisher is configured on PyPI. Register it at
-#   https://pypi.org/manage/account/publishing/
-# with project `sankey-mpl`, owner `nrrb`, repository `sankey_mpl`, workflow filename
-# `publish.yml`, environment `pypi`. The workflow filename must match exactly.
+# This file is inert until matching publishers are configured. TestPyPI and PyPI are
+# entirely separate services: separate accounts, separate project namespaces, separate
+# pending publishers. Register on both, and note the environment name differs:
+#
+#   https://test.pypi.org/manage/account/publishing/   environment: testpypi
+#   https://pypi.org/manage/account/publishing/        environment: pypi
+#
+# Both forms take: project `sankey-mpl`, owner `nrrb`, repository `sankey_mpl`,
+# workflow filename `publish.yml`. Owner and repository are the GitHub coordinates,
+# unrelated to the PyPI username. The workflow filename must match exactly.
 #
 # Note on name reservation: a *pending* publisher does not reserve the project name.
 # The name is only claimed by the first successful upload, so until then somebody else
@@ -16,10 +22,18 @@ on:
   push:
     tags: ["v*"]
   # Lets you publish a tag that already exists, such as v0.1.0, which was pushed
-  # before this workflow did. Run it from the Actions tab and select the tag as the
-  # ref. Dispatching from a branch instead will fail the version check below, which is
-  # deliberate: a release must come from a tag.
+  # before this workflow did: run it from the Actions tab and select the tag as the
+  # ref. Dispatching from a branch instead fails the version check below, which is
+  # deliberate, since a release must come from a tag.
+  #
+  # Defaults to TestPyPI, so the cautious path is the one you get by pressing enter.
   workflow_dispatch:
+    inputs:
+      target:
+        description: Which index to publish to
+        type: choice
+        options: [testpypi, pypi]
+        default: testpypi
 
 jobs:
   build:
@@ -62,7 +76,30 @@ jobs:
           name: dist
           path: dist/
 
-  publish:
+  # The rehearsal. Same artifacts, same OIDC path, a throwaway namespace. Worth doing
+  # once per project rather than once per release: what it catches is a broken
+  # publisher config or unrenderable README metadata, and those are properties of the
+  # setup, not of the version. Note TestPyPI burns version numbers just as permanently
+  # as PyPI does, so a failed real upload cannot be retried there under the same
+  # version.
+  testpypi:
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  pypi:
+    if: github.event_name == 'push' || inputs.target == 'pypi'
     needs: build
     runs-on: ubuntu-latest
     # Add required reviewers to this environment in Settings -> Environments to make
