@@ -1,0 +1,36 @@
+# Dependabot has more to do here than the two runtime dependencies suggest.
+#
+# The GitHub Actions ecosystem is the one that matters most: a workflow pinned to a
+# stale action tag is the likeliest way this repository rots, and publish.yml holds
+# the trusted-publishing credential path, so its actions are worth keeping current.
+#
+# pip is included for the dev extras. matplotlib and numpy are declared as floors
+# (>=), so Dependabot will not churn them; what it will surface is a new pytest, ruff
+# or mypy, and a new ruff or mypy is exactly what finds new problems in old code.
+#
+# npm covers tools/, which is not part of the package but is what regenerates the
+# golden geometry. A broken generator would not fail CI, since CI never runs it, so an
+# update notice is the only signal that it needs attention.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "Bumped"
+
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "Bumped"
+
+  - package-ecosystem: npm
+    directory: /tools
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "Bumped"

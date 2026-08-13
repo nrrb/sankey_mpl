@@ -1,0 +1,43 @@
+# CodeQL over the Python source.
+#
+# Worth being honest about what this can find here. The library parses no untrusted
+# input, opens no sockets, runs no subprocesses and deserialises nothing: it turns
+# numbers into matplotlib artists. So the injection and SSRF rules that make CodeQL
+# valuable elsewhere have nothing to bite on, and a clean result is close to a
+# foregone conclusion.
+#
+# It is still worth running, for two reasons. It is the standing check that catches a
+# future change which does introduce one of those paths, at the moment the change lands
+# rather than at review. And Dependabot alerts and CodeQL alerts share one surface in
+# the Security tab, so having it on means that tab reflects reality instead of being
+# empty because nothing was ever configured.
+#
+# The substantive half of the security setup is dependabot.yml, not this file.
+name: codeql
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly, so a newly published rule finds existing code without waiting for a push.
+    - cron: "37 4 * * 1"
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      # security-events: write is what lets results reach the Security tab. Without it
+      # the run succeeds and reports nowhere, which looks like a clean scan.
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          # Adds the maintainability and quality rules to the default security set.
+          queries: security-and-quality
+      - uses: github/codeql-action/analyze@v3
