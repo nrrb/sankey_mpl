@@ -10,7 +10,28 @@ diagram that moves is a broken diagram for anyone diffing rendered output.
 
 ## [Unreleased]
 
-Nothing yet.
+### Changed
+
+- **Label collision separation now groups labels by the horizontal space their text
+  occupies rather than by column.** Under the default `label_side_mode="outside"` the
+  column left of the plot middle aims its labels right and the column right of it aims
+  them left, so that pair shares a gap while sitting in different columns; a per-column
+  pass could not see it and those labels printed on top of each other. `"left"` mode had
+  a milder version, where a label longer than the column pitch reached back into the
+  previous column. Both are fixed. Overlap is transitive, so labels chain into one group
+  if each overlaps the next, and within a group a colliding pair still moves off its
+  shared midpoint, so neither label takes precedence.
+
+  **This moves labels**, which by the rule at the top of this file makes it breaking:
+  diagrams that previously had overlapping labels now have them spaced, so rendered
+  output changes for affected data. Node and ribbon geometry is untouched.
+
+### Fixed
+
+- `_separate`'s iteration budget was too small for the larger groups the change above
+  produces, leaving labels a fraction of a pixel closer than `label_line_height_px`
+  asked for. Raised, and the test now pins the closest overlapping pair to exactly the
+  line height so a shortfall cannot pass unnoticed.
 
 ## [0.1.1] - 2026-08-13
 

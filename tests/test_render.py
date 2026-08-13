@@ -114,7 +114,47 @@ def test_left_mode_puts_every_label_on_the_left(nodes, links, wide_enough):
 CROWDING_LINE_HEIGHT = 36.0
 
 
+def _closest_overlapping_labels(result) -> float:
+    """Smallest vertical gap between two labels that share horizontal space.
+
+    Grouped by span overlap rather than by column, because that is what the
+    separation pass now works on and what "these two could collide" means. Two
+    labels in different columns can share a gap: under the default side mode the
+    column left of the plot middle aims its labels right and the column to its right
+    aims them left.
+    """
+    boxes = []
+    for label in result.labels:
+        width = text_width(label["text"], result.config)
+        span = (
+            (label["x"], label["x"] + width)
+            if label["side"] == "right"
+            else (label["x"] - width, label["x"])
+        )
+        boxes.append((span, label["y"]))
+
+    worst = float("inf")
+    for i in range(len(boxes)):
+        for j in range(i + 1, len(boxes)):
+            (a0, a1), ay = boxes[i]
+            (b0, b1), by = boxes[j]
+            if a0 < b1 and b0 < a1:
+                worst = min(worst, abs(ay - by))
+    return worst
+
+
 def test_collision_separation_enforces_the_line_height(nodes, links, wide_enough):
+    """The invariant is per overlapping pair, not per column.
+
+    It used to be asserted per column, which missed the pair the default side mode
+    creates either side of the plot middle and would now read as over-separation
+    anyway: pushing a cross-column neighbour away moves a whole column, so a column's
+    internal gaps end up larger than the line height.
+
+    Asserting the closest overlapping pair covers both directions at once. Nothing
+    that shares horizontal space may be closer than the line height, and the closest
+    pair sits exactly at it, so the pass cannot pass by spreading everything out.
+    """
     config = {
         **wide_enough,
         "min_label_height_px": 0,
@@ -123,20 +163,12 @@ def test_collision_separation_enforces_the_line_height(nodes, links, wide_enough
     crowded = render_sankey(nodes, links, {**config, "label_collision_separation": False})
     spaced = render_sankey(nodes, links, {**config, "label_collision_separation": True})
 
-    def smallest_gap(result):
-        worst = float("inf")
-        by_column: dict[int, list[float]] = {}
-        for label in result.labels:
-            column = result.layout.nodes[label["key"]].column
-            by_column.setdefault(column, []).append(label["y"])
-        for values in by_column.values():
-            ordered = sorted(values)
-            for a, b in zip(ordered, ordered[1:], strict=False):
-                worst = min(worst, b - a)
-        return worst
-
-    assert smallest_gap(crowded) < CROWDING_LINE_HEIGHT
-    assert smallest_gap(spaced) == pytest.approx(CROWDING_LINE_HEIGHT, abs=1e-6)
+    assert _closest_overlapping_labels(crowded) < CROWDING_LINE_HEIGHT
+    # abs rather than exact: the pass converges by halving, so it lands a few parts
+    # in 1e14 short of the target rather than on it.
+    assert _closest_overlapping_labels(spaced) == pytest.approx(
+        CROWDING_LINE_HEIGHT, abs=1e-6
+    )
 
 
 def test_separation_preserves_label_order(nodes, links, wide_enough):

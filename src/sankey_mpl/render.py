@@ -262,9 +262,25 @@ def _separate(centres: Sequence[float], min_gap: float) -> list[float]:
 
     Order-preserving, so labels never swap places, and iterated because moving one
     pair apart can close another.
+
+    Each step moves both labels of a pair by the same amount in opposite directions,
+    which keeps the group's centre of mass fixed and keeps the adjustment local: a
+    label with room around it does not drift just because a distant pair collided.
+
+    The iteration budget is generous because it has been too small once already. It
+    was 200, which was ample while groups were single columns of at most eight
+    labels; grouping by span overlap merges two columns, and the longer chain needs
+    roughly a thousand sweeps to settle. Exhausting the budget is not an error, since
+    label spacing is cosmetic, but it does leave labels closer together than asked,
+    which is invisible without a test looking for it. The test that pins the closest
+    overlapping pair to exactly the line height is what would catch it again.
+
+    If this ever needs to be exact rather than generous, the standard approach is to
+    merge colliding labels into blocks and place each block on its members' mean,
+    which converges in one pass with no budget at all.
     """
     result = list(centres)
-    for _ in range(200):
+    for _ in range(10_000):
         moved = False
         for i in range(1, len(result)):
             gap = result[i] - result[i - 1]
@@ -276,6 +292,47 @@ def _separate(centres: Sequence[float], min_gap: float) -> list[float]:
         if not moved:
             break
     return result
+
+
+def _separate_clusters(entries: list[dict[str, Any]], min_gap: float) -> None:
+    """Separate labels that share horizontal space, in place.
+
+    Grouping by column would be the obvious thing and is not enough. Under the
+    default side mode the column left of the plot middle aims its labels right and
+    the column right of it aims them left, into the same gap, so that pair shares
+    horizontal space while sitting in different columns. A per-column pass cannot
+    see it, and those labels print on top of each other. ``"left"`` mode has a
+    milder version of the same problem: a label longer than the column pitch
+    reaches back into the previous column's space.
+
+    So the grouping is by actual span overlap, which is what "might collide" means;
+    a column is just the usual case of it. Spans are merged by a sweep, so overlap
+    is transitive: three labels chain into one group if each overlaps the next.
+
+    Within a group the order is by current vertical centre, and ``_separate``
+    moves a colliding pair off their shared midpoint, so neither label has
+    precedence over the other. Ties break on the node key to keep the result
+    reproducible.
+    """
+    ordered = sorted(entries, key=lambda entry: (entry["span"][0], entry["key"]))
+    groups: list[list[dict[str, Any]]] = []
+    reach = float("-inf")
+    for entry in ordered:
+        start, end = entry["span"]
+        if groups and start < reach:
+            groups[-1].append(entry)
+            reach = max(reach, end)
+        else:
+            groups.append([entry])
+            reach = end
+
+    for group in groups:
+        if len(group) < 2:
+            continue
+        group.sort(key=lambda entry: (entry["centre"], entry["key"]))
+        moved = _separate([entry["centre"] for entry in group], min_gap)
+        for entry, centre in zip(group, moved, strict=True):
+            entry["centre"] = centre
 
 
 def _check_gutter(frame: Frame) -> float:
@@ -309,45 +366,76 @@ def _draw_labels(ax, frame: Frame) -> tuple[list[dict[str, Any]], list[str]]:
     color = parse_color(config["label_color"])
     font = _font_properties(config)
 
-    columns: dict[int, list[tuple[Node, float, float, float]]] = {}
+    separating = bool(config["label_collision_separation"])
+
+    # Side and position are resolved for every label before anything is separated,
+    # because which labels can collide is decided by where their text lands rather
+    # than by which column their node is in. See _separate_clusters.
+    entries: list[dict[str, Any]] = []
     dropped: list[str] = []
     for node in frame.layout.nodes.values():
         rect_x, rect_y, width, height = frame.node_rect(node)
         if height < float(config["min_label_height_px"]):
             dropped.append(node.key)
             continue
-        columns.setdefault(node.column, []).append((node, rect_x, rect_y, height))
+        side = _label_side(frame, node)
+        text = node.label if node.label is not None else node.key
+        if side == "right":
+            text_x, align = rect_x + float(config["node_width_px"]) + offset, "left"
+        else:
+            text_x, align = rect_x - offset, "right"
+        entry = {
+            "key": node.key,
+            "column": node.column,
+            "rect_y": rect_y,
+            "centre": rect_y + height / 2.0,
+            "side": side,
+            "text": text,
+            "text_x": text_x,
+            "align": align,
+        }
+        if separating:
+            # Measured only on this path: text_width builds a glyph path per call,
+            # and a configuration that never separates has no use for the span.
+            measured = text_width(text, config)
+            entry["span"] = (
+                (text_x, text_x + measured)
+                if side == "right"
+                else (text_x - measured, text_x)
+            )
+        entries.append(entry)
+
+    if separating:
+        _separate_clusters(entries, float(config["label_line_height_px"]))
 
     placed: list[dict[str, Any]] = []
-    for column in sorted(columns):
-        members = sorted(columns[column], key=lambda item: item[2])
-        centres = [rect_y + height / 2.0 for _, _, rect_y, height in members]
-        if config["label_collision_separation"]:
-            centres = _separate(centres, float(config["label_line_height_px"]))
-        for (node, rect_x, _, _), centre in zip(members, centres, strict=True):
-            side = _label_side(frame, node)
-            text = node.label if node.label is not None else node.key
-            if side == "right":
-                text_x, align = rect_x + float(config["node_width_px"]) + offset, "left"
-            else:
-                text_x, align = rect_x - offset, "right"
-            ax.text(
-                text_x,
-                centre,
-                text,
-                ha=align,
-                # Canvas-style vertical centring is on the font's em box, not on
-                # the inked bounding box. "center" would drift upward for text
-                # without descenders; "center_baseline" uses font metrics.
-                va="center_baseline",
-                color=color,
-                fontproperties=font,
-                clip_on=False,
-                zorder=_LABEL_Z,
-            )
-            placed.append(
-                {"key": node.key, "side": side, "x": text_x, "y": centre, "text": text}
-            )
+    # Drawn in column then vertical order, which is the order the artists were
+    # emitted in before clustering existed. Keeping it stable keeps SVG output
+    # byte-reproducible.
+    for entry in sorted(entries, key=lambda item: (item["column"], item["rect_y"])):
+        ax.text(
+            entry["text_x"],
+            entry["centre"],
+            entry["text"],
+            ha=entry["align"],
+            # Canvas-style vertical centring is on the font's em box, not on the
+            # inked bounding box. "center" would drift upward for text without
+            # descenders; "center_baseline" uses font metrics.
+            va="center_baseline",
+            color=color,
+            fontproperties=font,
+            clip_on=False,
+            zorder=_LABEL_Z,
+        )
+        placed.append(
+            {
+                "key": entry["key"],
+                "side": entry["side"],
+                "x": entry["text_x"],
+                "y": entry["centre"],
+                "text": entry["text"],
+            }
+        )
     return placed, dropped
 
 

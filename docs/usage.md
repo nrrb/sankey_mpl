@@ -271,17 +271,21 @@ good to go. Default behaviour:
    both labels of a colliding pair off their shared midpoint. Order is preserved,
    so labels never swap places relative to their nodes.
 
-### The one collision the separation pass cannot fix
+### What counts as a collision
 
-Step 3 works **within a column**. That is deliberate, but it leaves one gap, and it
-is the gap the default rule creates: the column just left of the plot middle aims
-its labels right, and the column just right of it aims them left, so both land in
-the same space between the two columns. Those two labels are in different columns, so
-the separation pass never compares them, and they can print on top of each other.
+Step 3 groups labels by the horizontal space their text occupies, not by which column
+their node is in. That distinction matters because of the default side mode: the column
+just left of the plot middle aims its labels right and the column just right of it aims
+them left, so those two land in the same gap while sitting in different columns. A
+per-column pass cannot see that pair, and before 0.2.0 they printed on top of each
+other. `"left"` mode has a milder version of the same problem, where a label longer
+than the column pitch reaches back into the previous column's space.
 
-Nothing detects this for you. If your labels are long, either give the figure enough
-width that both fit in the column pitch, or switch to `"left"` mode, where every
-label points the same way and the pass sees every collision. A quick check:
+Grouping by overlap covers both, and overlap is transitive, so three labels chain into
+one group if each overlaps the next. Within a group the order is by vertical position
+and a colliding pair moves off its shared midpoint, so neither label takes precedence.
+
+If you want to confirm it on your own data:
 
 ```python
 result = render_sankey(nodes, links, config)
@@ -295,8 +299,9 @@ for label in result.labels:
     print(label["text"], span, label["y"])
 ```
 
-Two entries whose spans overlap at nearly the same `y` are drawn on top of each
-other. The gallery in the repository README is sized by exactly this measurement.
+No two entries whose spans overlap should be closer vertically than
+`label_line_height_px`. If any pair is, that is a bug worth reporting rather than
+something to size around.
 
 ### The alternative: keeping text off the ribbons
 

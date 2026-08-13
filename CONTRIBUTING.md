@@ -101,11 +101,18 @@ test whose only job is to stop someone undoing it.
 - **matplotlib cannot read WOFF or WOFF2.** An unregistered font family falls back
   silently, and that changes layout here rather than only appearance, because the
   gutter check and the collision pass both measure text.
-- **Label separation is per-column.** It cannot see a collision between a
-  right-pointing label in one column and a left-pointing one in the next, which is the
-  pair the default label side mode creates either side of the plot middle. There is no
-  assertion for it, because some data cannot avoid it at any sane width. `docs/usage.md`
-  has a snippet for checking your own data.
+- **Label separation groups by span overlap, not by column.** It used to be
+  per-column, which missed the pair the default side mode creates either side of the
+  plot middle: one column aims its labels right, the next aims them left, and both land
+  in the same gap. If you narrow that grouping back to columns, those labels overlap
+  again. `test_collision_separation_enforces_the_line_height` pins the closest
+  overlapping pair to exactly the line height, which catches both a regression and
+  over-separation.
+- **`_separate` has an iteration budget, and it has been too small once.** It was 200,
+  which was ample for single-column groups of at most eight labels and not enough once
+  groups merged two columns; the longer chain needs about a thousand sweeps. Exhausting
+  it is silent and leaves labels closer than asked, so the test above is the only thing
+  that would notice.
 - **When you add a top-level file, add it to the sdist `include` list** in
   `pyproject.toml`. That list is explicit, so a new file is omitted by default. Check
   with `python -m build --sdist && tar -tzf dist/*.tar.gz`.
