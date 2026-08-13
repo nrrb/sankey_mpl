@@ -74,6 +74,7 @@ include = [
   "docs",
   "README.md",
   "CHANGELOG.md",
+  "CONTRIBUTING.md",
   "LICENSE",
   "NOTICE",
 ]
