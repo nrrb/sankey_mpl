@@ -1,0 +1,81 @@
+# Publishes to PyPI using trusted publishing (OIDC), so no API token exists anywhere
+# in this repository or in its secrets. PyPI verifies the identity of this workflow
+# directly, which means there is no upload credential to leak or rotate.
+#
+# This file is inert until a matching publisher is configured on PyPI. Register it at
+#   https://pypi.org/manage/account/publishing/
+# with project `sankey-mpl`, owner `nrrb`, repository `sankey_mpl`, workflow filename
+# `publish.yml`, environment `pypi`. The workflow filename must match exactly.
+#
+# Note on name reservation: a *pending* publisher does not reserve the project name.
+# The name is only claimed by the first successful upload, so until then somebody else
+# can still take it.
+name: publish
+
+on:
+  push:
+    tags: ["v*"]
+  # Lets you publish a tag that already exists, such as v0.1.0, which was pushed
+  # before this workflow did. Run it from the Actions tab and select the tag as the
+  # ref. Dispatching from a branch instead will fail the version check below, which is
+  # deliberate: a release must come from a tag.
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The mistake this catches: `[tool.hatch.version]` reads `__version__` out of
+      # src/sankey_mpl/__init__.py, so tagging v0.2.0 without bumping that file
+      # publishes a wheel labelled 0.1.0. PyPI would accept it and the version number
+      # would then be wrong forever, since a released version can never be replaced.
+      - name: Tag must match __version__
+        run: |
+          python - <<'PY'
+          import os, pathlib, re, sys
+
+          ref = os.environ["GITHUB_REF_NAME"]
+          tag = ref.removeprefix("v")
+          source = pathlib.Path("src/sankey_mpl/__init__.py").read_text()
+          version = re.search(r'__version__ = "([^"]+)"', source).group(1)
+          print(f"ref {ref!r} -> tag {tag!r}, __version__ {version!r}")
+          if tag != version:
+              sys.exit(
+                  f"refusing to publish: ref {ref!r} does not match __version__ "
+                  f"{version!r}. Bump src/sankey_mpl/__init__.py and retag, or "
+                  f"dispatch this workflow from a tag rather than a branch."
+              )
+          PY
+
+      - run: python -m pip install --upgrade pip build twine
+      - run: python -m build
+      # Catches metadata that PyPI would reject, before anything is uploaded.
+      - run: python -m twine check --strict dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    # Add required reviewers to this environment in Settings -> Environments to make
+    # every release wait for a human. Recommended, because a PyPI version is permanent:
+    # it can be yanked but never replaced or reused.
+    environment: pypi
+    permissions:
+      # The whole point: this is what lets PyPI verify the workflow's identity. Without
+      # it the upload fails with an OIDC error rather than an auth error.
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
