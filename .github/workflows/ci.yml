@@ -32,6 +32,49 @@ jobs:
       - run: mypy
       - run: pytest -q --cov=sankey_mpl
 
+  # publish.yml hands the built distributions between two jobs with upload-artifact and
+  # download-artifact, and CI never runs publish.yml, so a bump to either action was
+  # untested until the next release actually used it. That is a bad place to find out:
+  # the artifact actions require matched versions, their majors are numbered
+  # independently, and a mismatch corrupts or loses the files being published.
+  #
+  # These two jobs exercise the same pair on every push. Keep the versions identical to
+  # the ones in publish.yml, which Dependabot does automatically since it updates every
+  # workflow in one PR.
+  #
+  # Checksums rather than a presence check: what matters is that bytes survive the round
+  # trip intact, since a corrupted wheel would reach PyPI and could never be replaced.
+  # download-artifact v8 errors on a digest mismatch by default, so this also confirms
+  # that path stays quiet.
+  artifact-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build a payload with known checksums
+        run: |
+          mkdir -p payload
+          printf 'text canary\n' > payload/canary.txt
+          head -c 4096 /dev/urandom > payload/canary.bin
+          cd payload && sha256sum canary.txt canary.bin > SHA256SUMS
+          cat SHA256SUMS
+      - uses: actions/upload-artifact@v7
+        with:
+          name: roundtrip
+          path: payload/
+          retention-days: 1
+
+  artifact-download:
+    needs: artifact-upload
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: roundtrip
+          path: payload/
+      - name: Every byte survived the round trip
+        run: |
+          ls -l payload
+          cd payload && sha256sum -c SHA256SUMS
+
   minimums:
     # Every row above installs the newest matplotlib and numpy, so the declared
     # floors in pyproject.toml were an assertion nothing tested. This pins them.
