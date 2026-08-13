@@ -12,6 +12,29 @@ diagram that moves is a broken diagram for anyone diffing rendered output.
 
 Nothing yet.
 
+## [0.1.1] - 2026-08-13
+
+### Fixed
+
+- `Node.column` and `Node.y` are typed `int` and `float` rather than `int | None` and
+  `float | None`. Both attributes are public and documented, but the optional
+  annotations described an internal construction state that no caller can observe, so
+  any consumer running a type checker had to add a redundant `assert` or
+  `# type: ignore` to do arithmetic on a documented attribute. Runtime behaviour is
+  unchanged, verified by byte-identical rendered output across all five test datasets.
+- The `Typing :: Typed` claim is now checked rather than asserted. The package shipped
+  `py.typed` while nothing had ever run a type checker over it; mypy runs in CI and the
+  twelve errors it reported are fixed.
+
+### Note on version identity
+
+0.1.0 and the repository briefly shared a version number while their sources differed,
+because the typing fix above landed after 0.1.0 was published. Nothing installed from
+PyPI was affected, and the difference was confined to type annotations, but the version
+string could not be used to identify the code. This release exists so the published
+artefact and a checkout agree again. Found by a downstream consumer, which is the point
+at which it stops being theoretical.
+
 ## [0.1.0] - 2026-08-12
 
 First tagged release, so everything here is new. There is no earlier version for
@@ -74,5 +97,6 @@ placement: `label_side_mode` defaulted to `"left"` with a 200px `label_gutter_px
 now defaults to `"outside"` with a 3px gutter. Reinstall at `v0.1.0` to be sure of what
 you have, and pin to the tag rather than the branch from here on.
 
-[Unreleased]: https://github.com/nrrb/sankey_mpl/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/nrrb/sankey_mpl/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/nrrb/sankey_mpl/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/nrrb/sankey_mpl/releases/tag/v0.1.0
