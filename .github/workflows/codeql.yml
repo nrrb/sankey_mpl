@@ -1,6 +1,6 @@
 # CodeQL over the Python source.
 #
-# Worth being honest about what this can find here. The library parses no untrusted
+# Worth stating plainly what this can find here. The library parses no untrusted
 # input, opens no sockets, runs no subprocesses and deserialises nothing: it turns
 # numbers into matplotlib artists. So the injection and SSRF rules that make CodeQL
 # valuable elsewhere have nothing to bite on, and a clean result is close to a

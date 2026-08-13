@@ -89,7 +89,7 @@ to label, which is the joke and also the label drop rule working.
 ![The Group Chat Decides Where to Get Brunch](https://raw.githubusercontent.com/nrrb/sankey_mpl/main/examples/groupchat.png)
 
 **[It Was DNS](https://github.com/nrrb/sankey_mpl/blob/main/examples/itwasdns.svg)**: a convergent funnel spanning six orders
-of magnitude, and the honest limit of a linear sankey. 2.4 million alerts against a
+of magnitude, and the real limit of a linear sankey. 2.4 million alerts against a
 single cosmic-ray alert means most of the diagram is one slab and nine of
 twenty-two labels fall below the drop threshold. That is the intended outcome
 rather than a bug: the library drops a label it cannot place legibly instead of

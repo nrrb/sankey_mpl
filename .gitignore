@@ -7,6 +7,13 @@ dist/
 *.egg-info/
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
+# pytest-cov leaves these behind; `pytest --cov` runs on every local test invocation
+# now that CI gates on coverage, so they appear constantly.
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
 tools/node_modules/
 tools/package-lock.json
 

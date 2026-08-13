@@ -2,8 +2,7 @@
 
 Thanks for looking. This file is the short version of what a change here has to
 respect. Several things in `layout.py` look like mistakes and are not, so the
-[Load-bearing decisions](#load-bearing-decisions) section is worth reading before
-simplifying anything.
+[Rules](#rules) section is worth reading before simplifying anything.
 
 ## Setup
 
@@ -51,7 +50,7 @@ explaining which properties it was built to exercise.
 the next dataset.** Two tests had to stop hardcoding numbers when the suite went from
 one dataset to five. Measure instead: `text_width()` exists for exactly this.
 
-## Rules about the fixtures
+## Fixture rules
 
 - **Never regenerate a golden from this library's own output.** A golden produced by
   the code under test proves only that the code agrees with itself. They come from
@@ -64,7 +63,7 @@ one dataset to five. Measure instead: `text_width()` exists for exactly this.
   `src:` label, and the `src:` key prefix. The first two are what let `conftest.py`
   derive the parity configuration instead of hardcoding it.
 
-## Load-bearing decisions
+## Rules
 
 Each of these looks like something to clean up. Each has a reason, and most have a
 test whose only job is to stop someone undoing it.

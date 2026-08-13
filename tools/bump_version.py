@@ -5,7 +5,7 @@
     python tools/bump_version.py minor --dry-run
 
 Takes the level as an argument because that is the part needing a human. Nothing can
-infer it from a diff, and in this project the call is unusually load-bearing: the
+infer it from a diff, and in this project the call carries unusual weight: the
 changelog's own rule is that *any* change to resolved geometry is breaking, even with
 an untouched API, because a diagram that moves is a broken diagram for anyone diffing
 rendered output. A renderer that draws two nodes in a different order has broken its
