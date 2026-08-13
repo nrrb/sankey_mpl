@@ -67,6 +67,7 @@ include = [
   "tools",
   "docs",
   "README.md",
+  "CHANGELOG.md",
   "LICENSE",
   "NOTICE",
 ]
