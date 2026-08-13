@@ -10,6 +10,10 @@ diagram that moves is a broken diagram for anyone diffing rendered output.
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [0.2.0] - 2026-08-13
+
 ### Changed
 
 - **Label collision separation now groups labels by the horizontal space their text
@@ -118,6 +122,7 @@ placement: `label_side_mode` defaulted to `"left"` with a 200px `label_gutter_px
 now defaults to `"outside"` with a 3px gutter. Reinstall at `v0.1.0` to be sure of what
 you have, and pin to the tag rather than the branch from here on.
 
-[Unreleased]: https://github.com/nrrb/sankey_mpl/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/nrrb/sankey_mpl/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/nrrb/sankey_mpl/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/nrrb/sankey_mpl/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/nrrb/sankey_mpl/releases/tag/v0.1.0

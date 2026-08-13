@@ -48,7 +48,7 @@ __all__ = [
     "text_width",
 ]
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 #: The ``chartjs-chart-sankey`` release this layout reproduces. Upstream changing
 #: its algorithm would change what "matching" means, so the target is pinned.
