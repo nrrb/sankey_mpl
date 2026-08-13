@@ -7,7 +7,7 @@
       "blurb": "Six columns of dense sharing. An audit of the office refrigerator, conducted under protest.",
       "orderSensitive": false,
       "preview": {
-        "width": 2260,
+        "width": 1760,
         "height": 480
       },
       "nodes": 22,
@@ -33,7 +33,7 @@
       "blurb": "A pure fan-out tree with no shared middle nodes — the control case where the overlap sweep has nothing to do.",
       "orderSensitive": false,
       "preview": {
-        "width": 1800,
+        "width": 1420,
         "height": 440
       },
       "nodes": 29,
@@ -46,7 +46,7 @@
       "blurb": "Strongly convergent, six orders of magnitude. 2.4 million alerts funnelled down to what was actually wrong.",
       "orderSensitive": false,
       "preview": {
-        "width": 2020,
+        "width": 1640,
         "height": 480
       },
       "nodes": 22,
@@ -59,7 +59,7 @@
       "blurb": "Diamonds that split and rejoin, plus equal sibling flows that the earlier tie-breaks resolve anyway.",
       "orderSensitive": false,
       "preview": {
-        "width": 1600,
+        "width": 1420,
         "height": 440
       },
       "nodes": 17,

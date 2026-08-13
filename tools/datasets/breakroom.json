@@ -93,15 +93,13 @@
       "`render` is what the golden was produced at and is a test concern; changing",
       "it moves geometry. This is a purely cosmetic knob.",
       "",
-      "Why these are wider than you would guess: under the default label side mode",
-      "labels point away from the plot middle, so the one column left of the middle",
-      "aims its labels right and the one to its right aims them left, both into the",
-      "same gap. The separation pass is per-column and cannot see that pair, so the",
-      "only fix is enough column pitch to fit both. These widths are the measured",
-      "minimum that leaves no overlapping label boxes; check with the detector",
-      "described in PLAN.md before lowering one."
+      "Sized for column pitch and label room, nothing subtler. These were briefly",
+      "wider to dodge a bug where the two columns either side of the plot middle",
+      "aimed their labels into the same gap and the per-column separation pass could",
+      "not see the collision. Fixed in 0.2.0, so the widths are back to what reads",
+      "best rather than what avoided an overlap."
     ],
-    "width": 2260,
+    "width": 1760,
     "height": 480
   }
 }
