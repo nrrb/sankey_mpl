@@ -9,6 +9,6 @@
   "dependencies": {
     "@napi-rs/canvas": "^1.0.5",
     "chart.js": "^4.5.1",
-    "chartjs-chart-sankey": "^0.15.0"
+    "chartjs-chart-sankey": "^0.19.1"
   }
 }
